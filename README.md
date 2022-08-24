@@ -16,5 +16,5 @@ Our objective is to cluster the countries based on various sales data provided t
 [Supervised Learning:Breast Cancer Detection analysis:](https://github.com/Ganeshdhanawade/Data-Science-Portfolio/blob/main/Breast_Cancer_Detection_Using_Machine_Learning_Classifier.ipynb)
 Using logistic regression to predict the tummer is present or not.Using XGboost classifier model gives an 98% accuracy.
 
-[Supervised Learning:PIMA diabetes analysis:](diabetes dataset/PIMA diabetes analysis.ipynb)
+[Supervised Learning:PIMA diabetes analysis:]([diabetes dataset/PIMA diabetes analysis.ipynb](https://github.com/Ganeshdhanawade/Data-Science-Portfolio/blob/main/diabetes%20dataset/PIMA%20diabetes%20analysis.ipynb)
 
