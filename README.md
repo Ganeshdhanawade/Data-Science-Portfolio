@@ -17,4 +17,4 @@ Our objective is to cluster the countries based on various sales data provided t
 Using logistic regression to predict the tummer is present or not.Using XGboost classifier model gives an 98% accuracy.
 
 [Supervised Learning:PIMA diabetes analysis:](https://github.com/Ganeshdhanawade/Data-Science-Portfolio/blob/main/diabetes%20dataset/PIMA%20diabetes%20analysis.ipynb)
-
+The datasets consist of several medical predictor (independent) variables and one target (dependent) variable, Outcome. Independent variables include the number of pregnancies the patient has had, their BMI, insulin level, age, and so on. Using random forest algorithm we get the 81% accuray.
