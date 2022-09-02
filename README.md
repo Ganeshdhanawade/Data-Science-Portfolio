@@ -20,4 +20,5 @@ Using logistic regression to predict the tummer is present or not.Using XGboost 
 The datasets consist of several medical predictor (independent) variables and one target (dependent) variable, Outcome. Independent variables include the number of pregnancies the patient has had, their BMI, insulin level, age, and so on. Using random forest algorithm we get the 81% accuray.
 
 ### Time Series Analysis
-
+[Air passenger analysis:](https://github.com/Ganeshdhanawade/Data-Science-Portfolio/blob/main/time%20series/Air%20passanger%20analysis.ipynb)
+To forcaste the value of Air passanger using the SARIMA algorithm.
