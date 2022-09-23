@@ -24,4 +24,4 @@ The datasets consist of several medical predictor (independent) variables and on
 To forcaste the value of Air passanger using the SARIMA algorithm.
 
 ### Rice production analysis
-[Rice Production:]
+[Rice Production:](Rice production analysis.ipynb)
