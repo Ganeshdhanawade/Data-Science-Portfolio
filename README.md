@@ -28,5 +28,6 @@ To forcaste the value of Air passanger using the SARIMA algorithm.
 To predict the rice production using the diffrent models.The Lasso regression model provide the 88% accuracy as compare to the high accuracy in other models.
 
 ![Capture1](https://user-images.githubusercontent.com/109405138/192024045-08339fe4-c76e-4e2b-987c-c5fb78fa8a4f.PNG)
-![New Project](https://user-images.githubusercontent.com/109405138/208868848-be1b6bfe-3b83-41bb-a1a4-4959e5c16896.gif)
+![New Project (1)](https://user-images.githubusercontent.com/109405138/208873102-9227aec9-6834-4f05-96f5-b715869bf89b.gif)
+
 
