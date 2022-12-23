@@ -31,3 +31,4 @@ To predict the rice production using the diffrent models.The Lasso regression mo
 ![New Project (1)](https://user-images.githubusercontent.com/109405138/208873102-9227aec9-6834-4f05-96f5-b715869bf89b.gif)
 
 
+
