@@ -10,7 +10,7 @@ Note: Data used in the projects (accessed under data directory) is for demonstra
 
 # End-to-End Projects
 ##### Below is the end to end projects and it can attach by resume
-[Rice Production Analysis :](https://github.com/Ganeshdhanawade/Rice-Production-Analysis)
+- [Rice Production Analysis :](https://github.com/Ganeshdhanawade/Rice-Production-Analysis)
 
 In this prediction help to that farmers they are interested in what is the amount of fertilizers, prestisides and seed is to requrired for maximize the output. Also find the what is the total havesting cost according to your production, and what price are you set per kg if you are selling the market.
 
