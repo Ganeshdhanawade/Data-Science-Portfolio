@@ -14,7 +14,9 @@ Note: Data used in the projects (accessed under data directory) is for demonstra
 
 In this prediction help to that farmers they are interested in what is the amount of fertilizers, prestisides and seed is to requrired for maximize the output. Also find the what is the total havesting cost according to your production, and what price are you set per kg if you are selling the market.
 
-- [Mobile Price Prediction](https://github.com/Ganeshdhanawade/Mobile-price-analysis)
+- [Mobile Price Prediction :](https://github.com/Ganeshdhanawade/Mobile-price-analysis)
+
+That projects to analyze the mobile price to help the new startup company for selecting the price of new mobiles. using Pthon, Flask, PowerBI we can analyse that project.
 
 # content
 ### Machine Learning
