@@ -6,7 +6,11 @@ Note: Data used in the projects (accessed under data directory) is for demonstra
 ## Instructions for Running Python Notebooks Locally
 1.Install dependencies using requirements.txt.
 
-2.Run notebooks as usual by using a jupyter notebook server, Vscode etc.
+2.Run notebooks as usual by using a jupyter notebook, server, Vscode etc.
+
+# End-to-End Projects
+##### Below is the end to end projects and it can attach by resume
+[Rice Production Analysis :]
 
 # content
 ### Machine Learning
@@ -27,8 +31,6 @@ To forcaste the value of Air passanger using the SARIMA algorithm.
 [Rice Production:](https://github.com/Ganeshdhanawade/Data-Science-Portfolio/blob/main/Rice%20production%20analysis.ipynb)
 To predict the rice production using the diffrent models.The Lasso regression model provide the 88% accuracy as compare to the high accuracy in other models.
 
-![Capture1](https://user-images.githubusercontent.com/109405138/192024045-08339fe4-c76e-4e2b-987c-c5fb78fa8a4f.PNG)
-![New Project (1)](https://user-images.githubusercontent.com/109405138/208873102-9227aec9-6834-4f05-96f5-b715869bf89b.gif)
 
 
 
