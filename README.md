@@ -10,7 +10,7 @@ Note: Data used in the projects (accessed under data directory) is for demonstra
 
 # End-to-End Projects
 ##### Below is the end to end projects and it can attach by resume
-[Rice Production Analysis :]
+[Rice Production Analysis :](https://github.com/Ganeshdhanawade/Rice-Production-Analysis)
 
 # content
 ### Machine Learning
