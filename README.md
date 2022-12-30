@@ -33,9 +33,7 @@ The datasets consist of several medical predictor (independent) variables and on
 [Air passenger analysis:](https://github.com/Ganeshdhanawade/Data-Science-Portfolio/blob/main/time%20series/Air%20passanger%20analysis.ipynb)
 To forcaste the value of Air passanger using the SARIMA algorithm.
 
-### Rice production analysis
-[Rice Production:](https://github.com/Ganeshdhanawade/Data-Science-Portfolio/blob/main/Rice%20production%20analysis.ipynb)
-To predict the rice production using the diffrent models.The Lasso regression model provide the 88% accuracy as compare to the high accuracy in other models.
+
 
 
 
