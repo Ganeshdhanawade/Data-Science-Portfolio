@@ -1,0 +1,277 @@
+          ############ Natural Language Processing ###########
+the mostly used the natural language processing in the text data now whatever i can talk the machine will understand the our language and answer the quation but the answer the quation that machine gose through various steps. 1st machine will understand our langulage and anser the relavant answer in our quation. so mostly three steps are used in NLP=NLG(natural laguage genralisation) + NLU(natural languate understanding) NLG is basically writting the laguage and NLU is the understand our language.The exaples of NLP is the voice recugnisation,google translate,chatboot,Q&A,eye checker-see the object and display the name,vidio caption etc.now google,amazon,microsoft,apple the are most reputed companys are work with nlp.Or more information we can disscuss in aboe ppt plese see.
+
+  #### Old re(reguler expression) concept #####
+ now this is the old concept but use the our NLP concept now whatever your sentence are invert into the token means each worrd of stetment is call by the token but some way i will use full stop, lash(/),(?) meny more that icon is called punctuation in here.so her re not understand that puctuation in sentence and not to separe esily, becouse that sepration here we can call many function and seprate it. so we use SpaCy library that library is seprate obove problem esily. some exaple we can show in re below but we not use re in most time. Ntural language toolkit(NLTK),SpaCy and SKlearn these are more usefully libraries in the NLP.
+
+#Split by Whitespace
+import re
+text = 'I\'m with you for the entire life in U.K.!'
+words = re.split(r'\W+', text)      ##spit the data in each word
+print(words[:100])   ##but here not seprated punctuations properly`
+
+import string
+import re
+# split into words by white space
+words = text.split()
+# prepare regex for char filtering
+re_punc = re.compile('[%s]' % re.escape(string.punctuation)) Punchuation sobat read kel
+# remove punctuation from each word
+stripped = [re_punc.sub('', w) for w in words]   #ithe remove kele punctuation.
+print(stripped[:100])
+
+# string.printable inverse of string.punctuation
+re_print = re.compile('[^%s]' % re.escape(string.printable)) #ithe printtable ne panctuation ghalvle aani puna add kel pn u.k. as joint dakhavt point saperate ny kart
+result = [re_print.sub('', w) for w in words]
+print(result)
+
+# Normalizing Case
+
+# split into words by white space
+words = text.split()
+# convert to lower case
+words = [word.lower() for word in words]
+print(words[:100])                          #ithe word space ne saperate kele aani sagle seprate zalele word he lower letter madhe aanle
+
+ so ithe jar aaplala simply word la tokan madhe convert karnyasathi punctuation,print table waigre bharpur opration karay lagtayt tamule he kichkt hotay thode far.
+
+
+     ############# SpaCy ################
+ya library mule varti yevde code kelet tachi garj ny bhasat derect outomatic hi library guess karte aani answer dete kiva seprate karte each word.
+
+pip install -U spacy
+
+import spacy
+nlp = spacy.load('en_core_web_sm') #core english language la nlp variable madhe save kartoy aani web_sm mahje samll kind chi language quantity vapartoy
+
+string = '"I\'m with you for the entire life in P.K.!"'
+print(string)                                             #yek sentence ghetl
+
+doc = nlp(string)
+for token in doc:
+    print(token.text, end=' | ')  #te sentence aapn spacy cha nlp variable madhe takun tache token madhe conversion kel aani each token '|' ne saperate karun show kel
+
+doc2 = nlp(u"We're here to help! Send snail-mail, email fahad@gmail.com or visit us at https://fahadhussaincs.blogspot.com/!")
+for t in doc2:
+    print(t)        #ithe vertically each token saperate hoil
+
+doc3 = nlp(u'A 5km NYC cab ride costs $10.30')
+for t in doc3:
+    print(t)           #spacy evd powerfull aahe ke $ aani 10.12 pan separe kart nit
+
+len(doc)                                                    #lenght baghu sakto
+
+doc5 = nlp(u'It is better to give than to receive.')
+# Retrieve the third token:
+doc5[2]                              #token chi indexing baghu shakto
+
+# Retrieve three tokens from the middle:
+doc5[2:5]
+
+doc6 = nlp(u'My dinner was horrible.')
+doc7 = nlp(u'Your dinner was delicious.')
+# Try to change "My dinner was horrible" to "My dinner was delicious"
+doc6[3] = doc7[3]       # shoe error you not repace the value
+
+
+doc8 = nlp(u'Apple to build a Hong Kong factory for $6 million')
+
+for token in doc8:
+    print(token.text, end=' | ')
+
+print('\n----')
+
+for ent in doc8.ents:
+    print(ent.text+' - '+ent.label_+' - '+str(spacy.explain(ent.label_))) #ya mule aapn sagli information baghto mahtwacha work chi maje apple he organisation che nav asu shakt as he spacy swata navanusar sangt information det.
+
+
+doc9 = nlp(u"Autonomous cars shift insurance liability toward manufacturers.")
+
+for chunk in doc9.noun_chunks:
+    print(chunk.text)            #chunk manje group madhe aapn aapla sentence divide karun pahu shakto noune_chunk manje noun asnare word cha chunk honar as.
+
+
+from spacy import displacy
+
+doc = nlp(u'Apple is going to build a U.K. factory for $6 million.')
+displacy.render(doc, style='dep', jupyter=True, options={'distance': 110}) #yamadhe pratek word che relation dep madhe graph cha sahane sangel aaplala konata word kay aahe aani tya word che aajun dusrya word shi ky asl relation aahe he drow karun dhakhavt.
+
+doc = nlp(u'Over the last quarter Apple sold nearly 20 thousand iPods for a profit of $6 million.')
+displacy.render(doc, style='ent', jupyter=True) #he graph ne ny tr tya shabdacha pude sangt ki ky aahe supporse qurter word asel tr tacha pude te date la represent kartay as sangt.
+
+
+   ############# toknisation #########
+here the convert the hole paragraph in string into each saprate word is colled toknisation. even you can create diffrence sentences as token in your paraghaph. if you have give only one line sentence so you can also separte each word of that sentence as token.
+
+
+# Tokenization of paragraphs/sentences
+import nltk            #hi pn yek changli library aahe nlp sathi
+nltk.download()      ###tya library madhe jevde feature aahet te sagle download kele yekdach kara sarkh nako
+
+paragraph = """I have three visions for India. In 3000 years of our history, people from all over 
+               the world have come and invaded us, captured our lands, conquered our minds. 
+               From Alexander onwards, the Greeks, the Turks, the Moguls, the Portuguese, the British,
+               the French, the Dutch, all of them came and looted us, took over what was ours. 
+               Yet we have not done this to any other nation. We have not conquered anyone. 
+               We have not grabbed their land, their culture, 
+               their history and tried to enforce our way of life on them. 
+               Why? Because we respect the freedom of others.That is why my 
+               first vision is that of freedom. I believe that India got its first vision of 
+               this in 1857, when we started the War of Independence. It is this freedom that
+               we must protect and nurture and build on. If we are not free, no one will respect us.
+               My second vision for India’s development. For fifty years we have been a developing nation.
+               It is time we see ourselves as a developed nation. We are among the top 5 nations of the world
+               in terms of GDP. We have a 10 percent growth rate in most areas. Our poverty levels are falling.
+               Our achievements are being globally recognised today. Yet we lack the self-confidence to
+               see ourselves as a developed nation, self-reliant and self-assured. Isn’t this incorrect?
+               I have a third vision. India must stand up to the world. Because I believe that unless India 
+               stands up to the world, no one will respect us. Only strength respects strength. We must be 
+               strong not only as a military power but also as an economic power. Both must go hand-in-hand. 
+               My good fortune was to have worked with three great minds. Dr. Vikram Sarabhai of the Dept. of 
+               space, Professor Satish Dhawan, who succeeded him and Dr. Brahm Prakash, father of nuclear material.
+               I was lucky to have worked with all three of them closely and consider this the great opportunity of my life. 
+               I see four milestones in my career"""
+               
+# Tokenizing sentences
+sentences = nltk.sent_tokenize(paragraph)    #sentenses wise token create keli
+
+# Tokenizing words
+words = nltk.word_tokenize(paragraph)       #each word of saperate token create kele
+
+
+     ##################  Stemming  ##################
+steming is basically use for go for base of the each word. manje history,historical ashe don word aahet sentence madhe tr yatle common part histori manje ha base zala taya partek word cha he consider kart.suppose finaly,final,finantial ya tin word madhla common part fina ha yekach work base word maun ghet karn aapl aaproch important word paryant pahchn aahe.fina yach meaning nit human la samjat nahi hach yacha drowback aahe.pn yachi kam karyancha vel ha khoop fast aahe as compare to lammanisation.he sentimantal analysis madhe vapartat jeki classification and retting through result asto manun.
+
+import nltk
+from nltk.stem import PorterStemmer  #stemming madhun porter stemmer import kel
+from nltk.corpus import stopwords     #je word karkhe papart is,on,it,they ashaprakare yach ky yevd important nasto tamule tana aapn ghalvto talach stopwork boltat
+
+sentences = nltk.sent_tokenize(paragraph)  #aapla varcha paraghap la sentence madhe toknize kel
+stemmer = PorterStemmer()    #stemming la yeka variable madhe store kel
+
+# Stemming
+for i in range(len(sentences)):    #ya looping madhe one by one sentence janar
+    words = nltk.word_tokenize(sentences[i])   #sentence la pratek word cha swarupat token karun words ya variable madhe store kele
+    words = [stemmer.stem(word) for word in words if word not in set(stopwords.words('english'))]    #aata tya word madhe stopword sodun aani stemming apply karun importat word rahtat te yeka list comprehension madhe store kele.set madhe uneque value ghet stopword madhli.
+    sentences[i] = ' '.join(words) #aani tya importat words la join karun puna sentence cha swarupat aanl 
+
+  #Or####  ---------there are two type of the stemming
+
+1)porter stemming :
+it devloped ny martin porter in 1980The algorithm have five phases of wod reduction,eah with its one set of mapping rule. 5 rule tayar kelet tya rule nusar he work kart. e.g. caresses asel tr te caress madhe convert kart cares as ny kart
+
+# Import the toolkit and the full Porter Stemmer library
+import nltk
+from nltk.stem.porter import *
+
+p_stemmer = PorterStemmer()
+words = ['run','runner','running','ran','runs','easily','fairly']  #ya word che porter stemming kas conversion kartoy te baghuyat
+
+for word in words:
+    print(word+' --> '+p_stemmer.stem(word))  #ya madhe aaple varche word aani corrospondig stemming conversion disel
+
+2)snowball stemming:------------
+he pn yek changl stemming aahe
+
+#SnowballStemmer
+from nltk.stem.snowball import SnowballStemmer
+# The Snowball Stemmer requires that you pass a language parameter
+s_stemmer = SnowballStemmer(language='english')
+
+words = ['run','runner','running','ran','runs','easily','fairly']
+# words = ['generous','generation','generously','generate']
+
+for word in words:
+    print(word+' --> '+s_stemmer.stem(word))  #similarly yach pn varchagt baghitl
+
+
+        ##################  Lemmatization  ################## 
+its work same as the upper fuction stemming. but processing time is large.final,finally,finalistion so it will serch the base word final and that word have an proper meaning so we use that lemmatization . and it will use in chatboot, q and a becouse that answer gives an proper meaning becouse humen is see that output.
+
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import 
+
+sentences = nltk.sent_tokenize(paragraph)
+lemmatizer = WordNetLemmatizer()
+
+# Lemmatization
+for i in range(len(sentences)):
+    words = nltk.word_tokenize(sentences[i])
+    words = [lemmatizer.lemmatize(word) for word in words if word not in set(stopwords.words('english'))]
+    sentences[i] = ' '.join(words) #that work is same as the upper stemming code.
+
+   ##########or#######
+# Perform standard imports:
+import spacy
+nlp = spacy.load('en_core_web_sm')   ##core english language la nlp variable madhe save kartoy aani web_sm mahje samll kind chi language quantity vapartoy
+
+
+var1 = nlp(u"John Adam is one the researcher who invent the direction of way towards success!")
+
+for token in var1:
+    print(token.text, '\t', token.pos_, '\t', token.lemma, '\t', token.lemma_)  #looping karun each token tachi possition kiva tachalemma ky yel he bghitl
+
+def show_lemmas(text):                        #varch yeka function madhe convert kel jamule aapn konthi sentence dil ki mahiti yel
+    for token in text:
+        print(f'{token.text:{12}} {token.pos_:{6}} {token.lemma:<{22}} {token.lemma_}')  
+
+var2 = nlp(u"John Adam is one the researcher who invent the direction of way towards success!")
+show_lemmas(var2)      #function madhi sentence dil
+
+
+              ######################### Stop Words ###########################
+Stop words are those words that do not contribute to the deeper meaning of the phrase. They are the most common words such as: the, a, and is. For some applications like documentation classification, it may make sense to remove stop words. NLTK provides a list of commonly agreed upon stop words for a variety of languages, such as English..
+
+import spacy
+nlp = spacy.load('en_core_web_sm')
+
+import nltk
+nltk.download('stopwords')      #nltk madhun stopword function load kele
+
+# Print the set of spaCy's default stop words (remember that sets are unordered):
+print(nlp.Defaults.stop_words)       #by defult nlp madhele stop word chi list provide bghuyat 326 aahet bydefult stopword 
+
+nlp.vocab['myself'].is_stop  #myself ha stopword aahe ka ny defult madhe he tumi check kartay myself ch ny tr dusr pn yekhad baghu shakta tumi tumcha nusar te stopword madhe asel tr answer true manun yeil.
+
+# Add the word to the set of stop words. Use lowercase!
+nlp.Defaults.stop_words.add('mystery')    #stopward bydefult yekhada word nasel tr tumi tala stopword madhe add karu shakta mg lenght pn madhel bydefult madhe 327 hotil.
+
+# Remove the word from the set of stop words
+nlp.Defaults.stop_words.remove('beyond')     #yekhada stopword remove pn karu shakta manhje nantr tala stopword manun ny system count karnar.
+
+nlp.vocab['beyond'].is_stop  #check kel kadlela word stopword aahe ka tr false ans yeil
+
+import string
+import re
+import nltk
+nltk.download('punkt')   #punkt he stopword sathi use hot
+from nltk import word_tokenize,sent_tokenize
+from nltk.corpus import stopwords
+# load data
+text = 'The Quick brown fox jump over the lazy dog!'  #ya sencence madhale stopword naslala value saperate karaycha aahet
+
+# split into words
+tokens = word_tokenize(text)
+print(tokens)                  #sentence che word wise token create kele
+
+# convert to lower case
+tokens = [w.lower() for w in tokens]
+print(tokens)            #sagle token small letter madhe convert kele
+
+# prepare regex for char filtering
+re_punc = re.compile('[%s]' % re.escape(string.punctuation))
+print(re_punc)     #punctuation aahe ka tokence madhe ha code comile kele
+
+# remove punctuation from each word
+stripped = [re_punc.sub('', w) for w in tokens]
+print(stripped)          #varcha code vaprun punctuation sagle kadhun takle token madhun
+
+# remove remaining tokens that are not alphabetic
+words = [word for word in stripped if word.isalpha()]
+print(words)      #alpabet aslele token fkt ghetle pn aapla data madhe sagle apphabet aahet tamule yamule yachi grj ny bhasnar
+
+# filter out non-stop words
+stop_words = set(stopwords.words('english'))
+words = [w for w in words if not w in stop_words]
+print(words)       #stopword madhe naslele token fkt show hotil

@@ -1,0 +1,63 @@
+  ####### Time seris analysis - fbprophet ######
+that library is made by the facebook to analyze time seris data it will automatic detect the problem and answer or fit the model accordingly so it also better than the ARIMA or  SARIMAX model.
+
+### pip install pystan
+### conda install -c conda-forge fbprophet
+import pandas as pd
+import fbprophet
+import matplotlib.pyplot as plt
+%matplotlib inline              #istall the libraries
+
+df=pd.read_csv('airline_passengers.csv')
+df.plot() #plot dataset
+
+df.drop(144,axis=0,inplace=True) #drop last column becouse it not imp
+df['ds'] = pd.to_datetime(df['ds']) #convert date column to datetime datatype
+
+from fbprophet import Prophet #import library
+
+dir(Prophet) #find the inbuld function in fbprophet
+
+model=Prophet()   #create model
+df.columns
+
+model.fit(df)  #fit data insite the model here note  convert x and y variable direct send our dataset it will outomatically analyze
+
+model.component_modes  #it shows the watt is hyperparameter are selected model in analysis perpose
+
+### Create future dates of 365 days
+future_dates=model.make_future_dataframe(periods=365)
+
+future_dates.tail() #future dataset taile
+
+prediction=model.predict(future_dates)
+prediction.head() #new feature dataset you can predict the model
+
+### plot the predicted projection
+model.plot(prediction)  #plot dataset
+
+#### Visualize Each Components[Trends,yearly]
+model.plot_components(prediction)
+
+
+  ### check cross validation score  #####
+
+Time Series Analysis
+
+1960-1962
+Cross Validation
+1960-61---Train dataset
+1961-62--Test dataset
+1962-63---Validation
+
+from fbprophet.diagnostics import cross_validation
+df_cv = cross_validation(model, initial='730 days', period='180 days', horizon = '365 days')
+df_cv.head()
+
+from fbprophet.diagnostics import performance_metrics
+df_p = performance_metrics(df_cv)
+df_p.head()
+
+from fbprophet.diagnostics import performance_metrics
+df_p = performance_metrics(df_cv)
+df_p.head()

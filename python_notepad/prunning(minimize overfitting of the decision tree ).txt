@@ -1,0 +1,72 @@
+   ###### Post pruning decision trees with cost complexity pruning #####
+import sklearn
+sklearn.__version__    === '0.23.1'  that library only present in above this or above this version of the sklern .
+
+this method is used for the neglate the problem of overfitting in decision tree here two parameters min_sample_leaf and max_depth means the tree go for the more insite the depth it means model will the overfitting so in that case we use that method to cut the braches of tree are go to more depth and overcome the problem of overfitting. ccp_alpha is that parameter is used to overcome that problem.
+
+he :class:DecisionTreeClassifier provides parameters such as min_samples_leaf and max_depth to prevent a tree from overfiting. Cost complexity pruning provides another option to control the size of a tree. In :class:DecisionTreeClassifier, this pruning technique is parameterized by the cost complexity parameter, ccp_alpha. Greater values of ccp_alpha increase the number of nodes pruned. Here we only show the effect of ccp_alpha on regularizing the trees and how to choose a ccp_alpha based on validation scores.
+
+See also minimal_cost_complexity_pruning for details on pruning.
+
+print(__doc__)
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
+from sklearn.tree import DecisionTreeClassifier
+Automatically created module for IPython interactive environment
+X, y = load_breast_cancer(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)  #train test split the dataset
+
+clf = DecisionTreeClassifier(random_state=0)
+clf.fit(X_train,y_train)  #use simple model to check accuracy
+
+pred=clf.predict(X_test)
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test, pred)
+
+
+from sklearn import tree
+plt.figure(figsize=(15,10))
+tree.plot_tree(clf,filled=True) #using that command check what branches are created in graphically
+
+path = clf.cost_complexity_pruning_path(X_train, y_train)
+ccp_alphas, impurities = path.ccp_alphas, path.impurities
+ccp_alphas   #using that command create the ccp_alpha value according to the our data
+
+clfs = []
+for ccp_alpha in ccp_alphas:
+    clf = DecisionTreeClassifier(random_state=0, ccp_alpha=ccp_alpha)
+    clf.fit(X_train, y_train)
+    clfs.append(clf)
+print("Number of nodes in the last tree is: {} with ccp_alpha: {}".format(
+      clfs[-1].tree_.node_count, ccp_alphas[-1]))
+Number of nodes in the last tree is: 3 with ccp_alpha: 0.03422474765119576
+For the remainder of this example, we remove the last element in clfs and ccp_alphas, because it is the trivial tree with only one node. Here we show that the number of nodes and tree depth decreases as alpha increases.
+
+
+
+  ##Accuracy vs alpha for training and testing sets
+When ccp_alpha is set to zero and keeping the other default parameters of :class:DecisionTreeClassifier, the tree overfits, leading to a 100% training accuracy and 88% testing accuracy. As alpha increases, more of the tree is pruned, thus creating a decision tree that generalizes better. In this example, setting ccp_alpha=0.015 maximizes the testing accuracy.
+
+
+train_scores = [clf.score(X_train, y_train) for clf in clfs]
+test_scores = [clf.score(X_test, y_test) for clf in clfs]
+
+fig, ax = plt.subplots()
+ax.set_xlabel("alpha")
+ax.set_ylabel("accuracy")
+ax.set_title("Accuracy vs alpha for training and testing sets")
+ax.plot(ccp_alphas, train_scores, marker='o', label="train",
+        drawstyle="steps-post")
+ax.plot(ccp_alphas, test_scores, marker='o', label="test",
+        drawstyle="steps-post")
+ax.legend()
+plt.show()    #above code shows the accuracy of the train test data with diffrent ccp_alpha parameters. which gives this value which can accuracy of both traing and testing is almost same
+
+clf = DecisionTreeClassifier(random_state=0, ccp_alpha=0.012)
+clf.fit(X_train,y_train)  #using that ccp_alpha model have good accuracy.
+
+pred=clf.predict(X_test)
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test, pred) #use that model is final model
+

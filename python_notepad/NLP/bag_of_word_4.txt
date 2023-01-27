@@ -1,0 +1,146 @@
+            ############ Bag of Words ################
+yamadhe aapn analysis karyacha prayatn karto manje sappose example tumi youtube var lecture gheta aani 3 locani comment kelay aani tya comment nusar tumala tumcha output bghaychay ki he changl aahe ki vait comment aahe je ki sentimental madhe barya paiki vapartat.3 stetment 1)he is good boy 2)she is good girl 3)girl and boy is good ya 3 statment var tumala aanalysis karaych asel tr saglat aadhi tumi stopword aani stemming kiva lemmitisation vaprun mojkech imp word shorted kara stetment 1)boy,good2)girl,good3)boy,girl,good aahe imp word yetil tumi table create kara. ya table madhe good kiti vela aahe present asel tr 1 nasel tr 0 as kara yach procedure la bag of word boltat jeki yeka bag sarkh aapn word store kartoy. drowback yacha ha aahe ki je word present aahet tith 1 yet(binary bag of word pn bolu shakto) pn aaplala yat pn konta word imp aahe he baghaych asel tr ny samjat. sentiment analysis la he vapra pn data jast asel tr he ny support kart.
+ashe barpur motha stement sathi word yetil aani kahi output pn astil tr ya word cha sahyane aapn model train karu deep nural network ne aane aaplyanusar output baghu.
+
+##krish naik##
+
+import nltk
+
+paragraph =  """I have three visions for India. In 3000 years of our history, people from all over 
+               the world have come and invaded us, captured our lands, conquered our minds. 
+               From Alexander onwards, the Greeks, the Turks, the Moguls, the Portuguese, the British,
+               the French, the Dutch, all of them came and looted us, took over what was ours. 
+               Yet we have not done this to any other nation. We have not conquered anyone. 
+               We have not grabbed their land, their culture, 
+               their history and tried to enforce our way of life on them. 
+               Why? Because we respect the freedom of others.That is why my 
+               first vision is that of freedom. I believe that India got its first vision of 
+               this in 1857, when we started the War of Independence. It is this freedom that
+               we must protect and nurture and build on. If we are not free, no one will respect us.
+               My second vision for India’s development. For fifty years we have been a developing nation.
+               It is time we see ourselves as a developed nation. We are among the top 5 nations of the world
+               in terms of GDP. We have a 10 percent growth rate in most areas. Our poverty levels are falling.
+               Our achievements are being globally recognised today. Yet we lack the self-confidence to
+               see ourselves as a developed nation, self-reliant and self-assured. Isn’t this incorrect?
+               I have a third vision. India must stand up to the world. Because I believe that unless India 
+               stands up to the world, no one will respect us. Only strength respects strength. We must be 
+               strong not only as a military power but also as an economic power. Both must go hand-in-hand. 
+               My good fortune was to have worked with three great minds. Dr. Vikram Sarabhai of the Dept. of 
+               space, Professor Satish Dhawan, who succeeded him and Dr. Brahm Prakash, father of nuclear material.
+               I was lucky to have worked with all three of them closely and consider this the great opportunity of my life. 
+               I see four milestones in my career"""
+               
+               
+# Cleaning the texts
+import re
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer     #text clining sathi imp library import kelya
+
+ps = PorterStemmer()
+wordnet=WordNetLemmatizer()
+sentences = nltk.sent_tokenize(paragraph)
+corpus = []
+for i in range(len(sentences)):      #31 statment aahet tevdya vela firel
+    review = re.sub('[^a-zA-Z]', ' ', sentences[i])   #a to z vatirikt ky asel tr te ghalvl
+    review = review.lower()            #sagle sentence lower letter madhe aanle
+    review = review.split()             #token madhe split kel
+    review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]   #token madhe stopword sodun steming madhe convert karun important word bajula kele
+    review = ' '.join(review) #split kelele token puna yektr karun tache sentene kel
+    corpus.append(review)        #finally sentence add kel corpus variable madhe
+    
+# Creating the Bag of Words model
+from sklearn.feature_extraction.text import CountVectorizer   #hi labrary aapn bag of word sathi vaprto
+cv = CountVectorizer(max_features = 1500)     #max feature manje word che limit 1500 dily
+X = cv.fit_transform(corpus).toarray()        #labrary aapla mahtvacha word la fit keli (ithe (32*no of word) cha matrix hoil aani sentence wise word present asel tr 1 nytr 0 deil.
+
+####fadus ####
+
+from sklearn.feature_extraction.text import CountVectorizer
+# list of text documents
+text = ["The quick brown fox jumped over the lazy dog."] #ya sentence la aapn bag of word apply karun baghu
+
+# create the transform
+vectorizer = CountVectorizer()
+# tokenize and build vocab
+vectorizer.fit(text)
+# summarize
+print(vectorizer.vocabulary_) #top la word chi nav ny tr tana 0,1,2.... ashaprakare kytri code assign kelela asto to aapn kontya word la ky assign kely yane baghu shakto
+
+
+# encode document
+vector = vectorizer.transform(text)
+# summarize encoded vector
+print(vector.shape)
+print(type(vector))
+print(vector.toarray())     #array cha format madhe answer baghitl
+
+##kiva he pn chalel##
+
+from sklearn.feature_extraction.text import CountVectorizer
+
+vectorizer = CountVectorizer(analyzer = "word", tokenizer = None, preprocessor = None, stop_words = None, max_features = 5000) 
+
+train_data_features = vectorizer.fit_transform(sentences)
+
+vectorizer.transform(["Machine learning is great","Natural Language Processing is a complex field",
+"Natural Language Processing is used in machine learning"]).toarray()    #word direct dile tri answer yel
+
+
+
+
+######################### TF-IDF(Term Freqency-Inverse Document Frequency)###############
+yamdhe same varachagt aahe pn yat pratek shabdala ye ye specific wieght assign kary thodkyat probability mantl tri chalel jo shabt jast importat aahe tala high probability assign kart jachamule analysis karyla soisker padte.
+yat term frequency cha aani inverse document frequency cha vegle formule aahet tacha multiplication karun yek formula tayar karto.
+same varch (1)good boy 2) good girl 3)boy girl good )ashe stetment madhe term frequency=no.of repeated of word in sentence / total no.of word in sentence 
+jar aapn good ya shabdasathi pahila stetment madhe baghitl tr 1/2 manje good yekdach aahe tya statment madhe aani total 2 word aahet as saglya word aani statement sathi matrix format madhe kada.
+Inverse Document Frequency =log(no.of sentences/no.of sentence contain word)
+manje log of total kiti sentence aahet divide by to pertiuler word saglya overall stetment madhe kiti vela aalay. varchasathi good ya shabdasathi log(3/2) overall 3 statment aani to good 2 vela present aahe.
+ithe statment ny disnar fakt word aani tacha smamor IDF asel.
+finally TF aani IDF che multiplication (3*3)*(1*3)=((3*3)matrix yel
+
+#krish naik##
+
+import nltk     #library import keli aani varchach paraghaph ithe vaprlay
+
+# Cleaning the texts
+import re
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+
+ps = PorterStemmer()
+wordnet=WordNetLemmatizer()
+sentences = nltk.sent_tokenize(paragraph)
+corpus = []
+for i in range(len(sentences)):
+    review = re.sub('[^a-zA-Z]', ' ', sentences[i])
+    review = review.lower()
+    review = review.split()
+    review = [wordnet.lemmatize(word) for word in review if not word in set(stopwords.words('english'))]
+    review = ' '.join(review)
+    corpus.append(review)
+    
+# Creating the TF-IDF model
+from sklearn.feature_extraction.text import TfidfVectorizer #fkt ithe TF-IDF la he function import karay lagel
+cv = TfidfVectorizer()
+X = cv.fit_transform(corpus).toarray()  #same varchagat ans yel fakt aata 1 and 0 ny tr weight assign zalele asel.
+
+##fadus##
+
+from sklearn.feature_extraction.text import TfidfVectorizer           #tfidfvectorizer aapla import karava lagto
+# list of text documents
+text = ["The car is driven on the road.","The truck is driven on the highway"]  #ya statement var aapply karun baghu
+
+# create the transform
+vectorizer = TfidfVectorizer()
+
+# tokenize and build vocab
+vectorizer.fit(text)
+
+#Focus on IDF VALUES
+print(vectorizer.idf_)   #tayar zalela vector baghitla
+
+# summarize
+print(vectorizer.vocabulary_)  #kontya word la ky nav code assign kely te disnar
+

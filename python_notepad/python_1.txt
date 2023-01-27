@@ -1,0 +1,502 @@
+  ####### Link for all python notes : krish naik ########
+
+######### https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbjlIU013N2hpaXp2YnprWHYwRUV3WTJTNkZsd3xBQ3Jtc0trZFlpQUdKVlhpNFVoMjJyc21DQ21nQjBGQ0JWdXluWTZVZHZRdTRWQjQyMVppYWpSaURvZVBGOUdiRWlKRUpnQ0NhdF9vZURiTkVIYzFyTlh4SGNFejZoNlJtOFFQRzNBNm0tZjlPX000X29SVE83RQ&q=https%3A%2F%2Fgithub.com%2Fkrishnaik06%2FMachine-Learning-in-90-days&v=wlS_fWxIPyQ #########
+
+print('Hi, New Programmer in Python!')
+print("Hi, New Programmer in Python!")
+print('''Hi,
+New
+Programmer
+in
+Python!''')
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+a=2;
+print("Index number of a is: {} ",format(id(a)))
+
+a=3;
+print("Index number of a is: {} ",format(id(a)))
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+#number
+a=1;
+print(a)
+
+b=2.52
+print(b)
+
+c=2+5j;
+print(c)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+#string
+s1='Fahad'
+s2="Hussain"
+
+#cont
+print(s1+s2)
+#rep
+print(s1*3)
+#slic
+print(s1[0:4])
+#index
+print(s1[-1:]+s1[1])
+#find
+print(s1.find('d'))
+#replace
+print(s1.replace('d','z'))
+#split
+print(s1.split('.'))
+#count
+print(s1.count('a',0,4))
+#upper
+print(s1.upper())
+#max
+print(s1.max())
+#min
+print(s1.min())
+#isalpha
+print(s1.isalpha())
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+s2 = " Fahad";
+s3 = 'Fahad ';
+print(s2)
+#speace left, right or both side...
+print(s1.lstrip())
+print(s1.rstrip())
+print(s1.strip())
+
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+
+#tuple
+
+tup = (1,1.25, 3j, 'a', "ABC")
+print(tup)
+tup1 = (1,1.25, 3j, 'a', "ABC",(1,2,3,4,"asdf"))
+print(tup1)
+print(tup1+(11,11))
+print(tup*2)
+print(tup[1:2])
+print([0])
+
+
+#DataTypes in Python
+#list
+li =[1,1.25, "asdf",'as', 5j]
+Dict = [1:"abc", 2:"DNA", 3:4+5j]
+sett=[1,2,3,4,5]
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+listt =[1, 1.25, "asdf", 'ss', 5j]
+listt[0]="Asia"
+print(listt)
+print(listt+['Fahad'])
+print(listt*2)
+print(listt[1:3])
+print(listt[0])
+print(listt.append('ssss'))
+print(listt)
+print(listt.extend(['s','d',"asd"]))
+print(listt)
+print(listt.insert(0,'Hussain'))
+print(listt)
+print(listt.pop())
+print(listt)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+Dict1=[]
+Dict=[1:"Fahad", 2:"Hussain", "Faculty:"Yes" ]
+print(Dict[1])
+print(len(Doit)
+print(Dict.keys())
+print(Dict.values())
+print(Dict.items())
+print(Dict.get(1))
+print(Dict.update((2:'Ali'}))
+print(Dict.pop(2))
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+#Set
+s = (1,2,3,4,5,5,5)
+print(s)
+s1=(1,2,3)
+s2 = (1,2,'b')
+print(s1 | s2)
+print(s1 & s2)
+print(s1 - s2)
+
+a=1;
+if(a>=1):
+  print("The value of a is 1 or greater "+str(a))
+
+_ _ _ _ _ _ _ _ _ _ _ _ _
+a=0;
+if(a>=1):
+  print("The value of a is 1 or greater "+str(a))
+else:
+  print("Else Body of if!")
+_ _ _ _ _ _ _ _ _ _ _ _ _
+a=1;
+b=2;
+if(a>=1):
+  print("The value of a is 1 or greater "+str(a))
+  if(b==2):
+    print("Nested if!")
+  else:
+    print("first If body")
+else:
+  print("first if else body")
+ 
+_ _ _ _ _ _ _ _ _ _ _ _ _
+a=10
+b=20
+c=30
+if(a>10):
+  print("Greater")
+elif b>=20:
+  print("20 Greater or equal")
+elif c>30:
+  print("Greater")
+
+_ _ _ _ _ _ _ _ _ _ _ _ _
+a=1
+b=2
+c=3
+if(a>10):
+  print("Greater")
+elif b>=20:
+  print("20 Greater or equal")
+elif c>30:
+  print("Greater")
+else:
+  print("Default!")
+
+#Loop in Python....
+
+#For(int i =0; i<=10;i++)
+#{
+#    print(i)
+#}
+for a in range(1,11,1):
+  print(a)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+for a in range(2,11,2):
+  print(a)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+for a in range(1,11,2):
+  print(a)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+for a in range(1,11,2):
+  print(a)
+  for b in range(11,20,2):
+    print(b)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+z=0;
+while z<=10:
+  print(z)
+  z=z+1;
+_ _ _ _ _ _ _ _ _ _ _ _ _
+z=0;
+while z<=10:
+  print(z)
+  zz=0;
+_ _ _ _ _ _ _ _ _ _ _ _ _
+while zz<=10:
+  print(zz)
+  zz=zz+1;
+  z=z+1;
+
+
+#continue, break, pass
+for i in range(1,11):
+
+  if i==1:
+    pass
+  if i==5:
+    continue
+  if i==8:
+    break
+  print ("This is iteration no. ", i)
+
+
+#Operator in Python
+
+#Arithematic Operation in Python
+a=11;b=3;
+print(a+b)
+print(a-b)
+print(a*b)
+print(a/b)
+print(a%b)
+print(a**b)
+print(a//b)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+#Comparision Operation in Python
+a=11;b=11;
+print(a>b)
+print(a<b)
+print(a>=b)
+print(a<=b)
+print(a!=b)
+print(a==b)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+#Assignment Operators (=, +=, -=, *= .....)
+a=2;
+print(a)
+a*=2; # a= a*2
+print(a)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+#Bitwise Operator (&, |, ^, ~, >>, <<)
+a=2;
+b=3;
+print(a & b)
+print( a | b)
+print(a ^ b)
+print(~a)
+print (a >> b)
+print (a << b)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+# Logical Operator in Python ( and, or, not)
+a = True;
+b = True;
+print( a and b)
+print( a or b)
+print( not b)
+a=2
+b=5
+c=50
+if ( (a>=5 and b>=10) or (c<=49) ):
+  print("True")
+else:
+  print("Not ture")
+_ _ _ _ _ _ _ _ _ _ _ _ _
+# Membership Operator (in, not in)
+Var=['a', 23, 25.12, "Fahad"]
+print(100 not in Var)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+#identity operator (is, is not)
+x=5;
+y=5;
+z=4;
+print( x is y)
+print( x is not y)
+print( x is z)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+
+def printfunction(a):
+    a=a*2
+    print(a)
+
+printfunction(3)
+
+def returnfunction(b):
+    b=b*2
+    return b;
+
+printfunction(3)
+
+p= printfunction(3)
+
+r= returnfunction(3)
+
+p
+
+r
+
+type(p)
+
+type(r)
+_ _
+
+x = lambda a : a + 10
+print(x(5))
+_ _ _ _ _ _ _ _ _ _ _ _ _
+x = lambda a, b : a * b
+print(x(5, 6))
+_ _ _ _ _ _ _ _ _ _ _ _ _
+x = lambda a, b, c : a + b + c
+print(x(5, 6, 2))
+_ _ _ _ _ _ _ _ _ _ _ _ _
+def myfunc(n):
+  return lambda a : a * n
+mydoubler = myfunc(2)
+print(mydoubler(11))
+_ _ _ _ _ _ _ _ _ _ _ _ _
+def myfunc(n):
+  return lambda a : a * n
+mytripler = myfunc(3)
+print(mytripler(11))
+_ _ _ _ _ _ _ _ _ _ _ _ _
+def myfunc(n):
+  return lambda a : a * n
+mydoubler = myfunc(2)
+mytripler = myfunc(3)
+print(mydoubler(11))
+print(mytripler(11))
+_ _ _
+
+'''
+public void abc()
+{
+int a=2;b=3;
+cw(a+b)
+}
+'''
+def Sum():
+  a=1;b=3;
+  print(a+b)
+_ _ _ _ _ _ _ _ _ _ _ _ _
+'''
+public int abc()
+{
+return c;
+}
+'''
+def sumpara(a, b):
+  return (a+b);
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+sumpara(5,5)
+
+_ _ _ _ _ _ _ _ _ _ _ _ _
+'''
+public void first()
+{
+cw("First");
+public void Second()
+{
+cw("Second");
+}
+Second()
+
+}
+_ _ _ _ _ _ _ _ _ _ _ _ _
+'''
+def first():
+  print("first")
+  def second():
+    print("second")
+  second()
+
+first()
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+'''
+int a;
+public void abc()
+{
+this.a =12;
+}
+
+'''
+class Python:
+  def sum(self, a, b):
+    #this
+    print(a+b)
+'''
+Python obj = new Python();
+obj.sum();
+'''
+#Creating Object
+# Python obj = new Python();
+obj=Python()
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+
+#First Method to call function
+Python.sum(obj,1,2)
+
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+#Second Method to call function
+
+#obj.Sum();
+obj.sum(1,4)
+
+''
+public Python(int a, int b)
+{
+this.a =a;
+this.b=b;
+}
+sum()
+{
+cw(a+b)
+}
+Python obj = new Python(2,3);
+obj.sum();
+'''
+#Constructor in Python, with function
+
+class Car():
+    # instance attributes
+ 
+    def __init__(self, model, color):
+        #instance Variable
+        self.model = model
+        self.color = color
+     # instance Method
+    def carmodel(self):
+        print("started",self.model)
+
+    def carcolor(self):
+        print("stopped",self.color)
+
+#obj = Python();
+objj= Car(1993,"Pink")
+
+_ _ _ _ _ _ _ _ _ _ _ _ _
+
+objj.carcolor();
+objj.carmodel();
+
+ ##########diff print and return ##########
+
+def hollow_word():
+ return "hallow word"
+
+a=hallow_word() #return mule ithe value store hote aani a print kela tri value show hote pn return cha jagi print kel tr hollow_word() exicute kel trch value show hoil otherwise variable madhe convert kelav ny value tat store karnar
+
+  ####### key value argument #######
+
+def add(b,a=2): #yamadhe b hi  argument aahe a hi keyword argument aahe
+def add(*args,**kwargs): #ashaprakare he define kel jat
+
+   ########## lambda function #######
+also called as anonumus function that means function have no name
+ def add(a,b):
+   return a+b
+ithe fuct single expression aahe asha veli aapn labda function use karto
+
+x=lambda a,b: a+b
+
+  ####### map function in python #####
+def even_odd(num):
+ if num%2==0:
+   return "even"
+ else:
+   return "odd"
+
+even_odd(25)  #function madhun number even ka odd aahe he sangl
+
+pn number hi list aahe a=[1,2,3,4,5,6] mala he even ka odd aahe he baghayche asel tr mala ittrate looping karun odd baghav lagl tamule aapn map filter cha vapar karu yala jast memory ny lagt.
+
+list(map(even_odd, a)) #ithe a list nusar ittrate houn aaplala even ka odd number aahe te disnar
+
+   ############ filter function ########
+def even(num):
+ if num%2==0:
+   return "even"
+
+a=[1,2,3,4,5,6]
+list(filter(even, a))  #yamudhe yevde looping firnar aani aapli condition aahe tala anuswarun fkt even number ch run hotil bakich ny yala filter boltat
+
+######## itrable and ittrator ####
+ittrator manje aapli list a=[1,2,3,4,5] ithe sagle elament store aahet perticuler possition la pn list modhi asel tr space jast jato tasathi ittrator vaprarto
+
+z=iter(a)
+next(z)  #aata a ya list madhle jasa call caral tasa yek yek element memory madhe sore houn aaplala show hoto yekdam ny sagl show honar

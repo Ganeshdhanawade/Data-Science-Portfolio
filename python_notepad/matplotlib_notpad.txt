@@ -1,0 +1,233 @@
+
+
+
+
+     ########  matplotlib  ########
+To make necessary statistical inferences, it becomes necessary to visualize your data and Matplotlib is one such solution for the Python users. It is a low level graph plotting library in python that serves as a visualization utility. It was created by John D. Hunter.
+
+A Matplotlib figure can be categorized into several parts as below:
+
+Figure: 
+This class is the top-level container for all the plots means it is the overall window or page on which everything is drawn. It is a whole figure which may contain one or more than one axes (plots). You can think of a Figure as a canvas which contains plots.
+
+Axes:
+ It is what we generally think of as a plot. A Figure can contain many Axes. It contains two or three (in the case of 3D) Axis objects. Each Axes has a title, an x-label and a y-label.
+
+Axis:
+ They are the number line like objects and take care of generating the graph limits.
+
+Artist: 
+Everything which one can see on the figure is an artist like Text objects, Line2D objects, collection objects. Most Artists are tied to Axes.
+
+####
+Pyplot is a module of Matplotlib which provides simple functions to add plot elements like lines, images, text, etc. to the current axes in the current figure.
+####
+
+
+import matplotlib.pyplot as plt
+
+eg.
+import matplotlib.pyplot as plt
+import numpy as np
+
+xpoints = np.array([0, 6])
+ypoints = np.array([0, 250])
+
+plt.plot(xpoints, ypoints)
+plt.show()
+
+
+  #########  Figure class and axes  #######
+
+ 1)  import matplotlib.pyplot as plt                           # Python program to show pyplot module
+   from matplotlib.figure import Figure   
+   fig = plt.figure(figsize =(5, 4))                  # Creating a new figure with width = 5 inches and height = 4 inches
+   ax = fig.add_axes([1, 1, 1, 1])                 # Creating a new axes for the figure : axes[left, bottom, width, height]
+   ax.plot([2, 3, 4, 5, 5, 6, 6], [5, 7, 1, 3, 4, 6 ,8])    # Adding the data to be plotted
+   plt.show()
+
+2) 
+   ax1 = fig.add_axes([1, 1, 1, 1])                          # Creating first axes for the figure
+   ax2 = fig.add_axes([1, 0.5, 0.5, 0.5])                    # Creating second axes for the figure
+   ax1.plot([2, 3, 4, 5, 5, 6, 6], [5, 7, 1, 3, 4, 6 ,8])    # Adding the data to be plotted
+   ax2.plot([1, 2, 3, 4, 5], [2, 3, 4, 5, 6])
+   plt.show()
+
+  ####### Setting Limits and Tick labels  #######
+
+   Python program to show pyplot module
+   import matplotlib.pyplot as plt 
+   from matplotlib.figure import Figure 
+   x = [3, 1, 3] 
+   y = [3, 2, 1] 
+   fig = plt.figure(figsize =(5, 4))             # Creating a new figure with width = 5 inches and height = 4 inches   
+   ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])       # Creating first axes for the figure
+   ax.plot(x, y)                                 # Adding the data to be plotted
+   ax.set_xlim(1, 2)
+   ax.set_xticklabels(( "one", "two", "three", "four", "five", "six")) 
+   plt.show()
+
+  plt.plot([3,5,7,2,3],[4,3,1,2,4],"go")   #go=green col with circle
+  plt.title("plot")
+  plt.xlable("xvalue")
+  plt.ylable("yvalue")
+  plt.show()
+
+
+ ########## Subplot  ######
+  plt.subplot(1,2,1)
+  plt.plot([3,5,7,2,3],[4,3,1,2,4],"go")   #go=green col with circle
+  plt.title("plot1")
+  plt.xlable("xvalue1")
+  plt.ylable("yvalue1")
+
+  plt.subplot(1,2,2)
+  plt.plot([3,3,7,4,3],[1,3,2,2,4])   
+  plt.title("plot2")
+  plt.xlable("xvalue2")
+  plt.ylable("yvalue2")
+
+  plt.subtitle("my sub_plot")
+  plt.show()
+
+  ########## legend  #####
+  x = [3, 1, 3] 
+   y = [3, 2, 1] 
+   plt.plot(x, y)
+   plt.plot(y, x)
+   # Adding the legends
+   plt.legend(["blue", "orange"])
+   plt.show()
+  
+######## marker ##########
+ypoints = np.array([3, 8, 1, 10])
+plt.plot(ypoints, marker = 'o',ms = 20,mec = 'r',mfc = 'r')    #give dot on each plotted point,ms=size of that dot
+plt.show()                                            #mec=marker edge colour(kadancha colour) ,mfc=m.face.col(golacha col)
+
+
+
+ #########  Line Graph  ##########
+
+ import matplotlib.pyplot as plt   # data to display on plots 
+   x = [3, 1, 3] 
+   y = [3, 2, 1] 
+   plt.plot(x, y)           # This will plot a simple line chart with elements of x as x axis and y as y axis
+   plt.title("Line Chart")
+   plt.legend(["Line"])     # Adding the legends
+   plt.show()
+
+ 2) import matplotlib.pyplot as plt
+    plt.rcParams["figure.figsize"] = (20,20)
+    plt.xlabel('a')
+    plt.ylabel('b')
+    plt.title('chart')
+    plt.plot(x,y,color='red',linestyle='--',marker='*')  # g+-- = g=green col,+ =point in that sign, -- =line stile
+
+  days=[1,2,3,4,5,6,7]
+max_t=[50,51,52,48,47,49,46]
+min_t=[43,42,40,44,33,35,37]
+avg_t=[45,48,48,46,40,42,41]
+plt.plot(days, max_t, label="max" )
+plt.plot(days, min_t, label="min" )
+plt.plot(days, avg_t, label="average" )
+plt.legend(loc='upper right', fontsize="large",shadow=True)
+
+ #########  Bar Graphs  #########
+
+division=["A","B","C","D","E"]
+avg_mark=[70,82,73,68,65]
+
+##simple bar ##
+plt.bar(division,avg_mark,col="green")
+plt.title("bar_graph")
+plt.xlabel("division")
+plt.ylabel("marks")
+plt.show()
+
+##check variation bar ##
+var=[5,8,7,6,4]
+plt.barh(division,avg_mark,col="green",xerr=var)#barh=plot horizontally with var
+
+##Multiple bar ##
+company=['GOOGL','AMZN','MSFT','FB']
+revenue=[90,136,89,27]
+xpos = np.arange(len(company))
+xpos
+plt.bar(xpos-0.2,revenue, width=0.4, label="Revenue")
+plt.bar(xpos+0.2,profit, width=0.4,label="Profit")
+
+plt.xticks(xpos,company)
+plt.ylabel("Revenue(Bln)")
+plt.title('US Technology Stocks')
+plt.legend()
+
+##subdivided bar ##
+
+plt.bar(company,revenue, label="Revenue")
+plt.bar(company,profit,label="Profit")
+
+#plt.xticks(xpos,company)
+plt.ylabel("Revenue(Bln)")
+plt.title('US Technology Stocks')
+plt.legend()
+
+##scatter diagram ##
+
+max_t=[50,51,52,48,47,49,46]
+min_t=[43,42,40,44,33,35,37]
+plt.scatter(max_t,min_t)
+plt.xlabel("max_t")
+plt.ylabel("min_t")
+plt.title("scatter diagram")
+
+                            ######### summary of matplotlib.pyplot   ##########
+
+ plot(x-axis values, y-axis values)              — plots a simple line graph with x-axis values against y-axis values
+show()                                           — displays the graph
+title(“string”)                                  — set the title of the plot as specified by the string
+xlabel(“string”)                                 — set the label for x-axis as specified by the string
+ylabel(“string”)                                 — set the label for y-axis as specified by the string
+figure()                                         — used to control a figure level attributes
+subplot(nrows, ncols, index)                     — Add a subplot to the current figure
+suptitle(“string”)                               — It adds a common title to the figure specified by the string
+subplots(nrows, ncols, figsize)                  — a convenient way to create subplots, in a single call. It returns a tuple of a figure and number of axes.
+set_title(“string”)                              — an axes level method used to set the title of subplots in a figure
+bar(categorical variables, values, color)        — used to create vertical bar graphs
+barh(categorical variables, values, color)       — used to create horizontal bar graphs
+legend(loc)                                      — used to make legend of the graph
+xticks(index, categorical variables)             — Get or set the current tick locations and labels of the x-axis
+pie(value, categorical variables)                — used to create a pie chart
+hist(values, number of bins)                     — used to create a histogram
+xlim(start value, end value)                     — used to set the limit of values of the x-axis
+ylim(start value, end value)                     — used to set the limit of values of the y-axis
+scatter(x-axis values, y-axis values)            — plots a scatter plot with x-axis values against y-axis values
+axes()                                           — adds an axes to the current figure
+set_xlabel(“string”)                             — axes level method used to set the x-label of the plot specified as a string
+set_ylabel(“string”)                             — axes level method used to set the y-label of the plot specified as a string
+scatter3D(x-axis values, y-axis values)          — plots a three-dimensional scatter plot with x-axis values against y-axis values
+plot3D(x-axis values, y-axis values)             — plots a three-dimensional line graph with x-axis values against y-axis values
+
+     ##### seaborn ######
+
+ Keys Features :
+ Seaborn is a statistical plotting library
+ It has beautiful default styles
+ It also is designed to work very well with Pandas dataframe objects.
+
+ ### scatter plot  ##
+
+sns.scatterplot(x='capital_loss',y='capital_gain',data=census_data)
+
+sns.set(style="darkgrid")
+tips = sns.load_dataset("tips")              #tips is inbuild dataset in seaborn
+sns.relplot(x="total_bill", y="tip", data=tips);
+
+sns.scatterplot(x='capital_loss',y='capital_gain',hue='marital_status',size='age',data=census_data)
+
+### line plot  ###
+
+df = pd.DataFrame(dict(time=np.arange(500),
+                       value=np.random.randn(500).cumsum()))
+g = sns.relplot(x="time", y="value", kind="line", data=df)
+g.fig.autofmt_xdate()
+                                                                                       

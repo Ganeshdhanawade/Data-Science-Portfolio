@@ -1,0 +1,93 @@
+########### Feature Selection- Dropping constant features ##########
+In this step we will be removing the features which have constant features which are actually not important for solving the problem statement
+
+# Import pandas to create DataFrame 
+import pandas as pd 
+  
+# Make DataFrame of the given data 
+data = pd.DataFrame({"A":[1,2,4,1,2,4], 
+                    "B":[4,5,6,7,8,9], 
+                    "C":[0,0,0,0,0,0],
+                    "D":[1,1,1,1,1,1]}) 
+
+data.head()  
+
+      ###### Variance Threshold ########
+
+Feature selector that removes all low-variance features.
+
+This feature selection algorithm looks only at the features (X), not the desired outputs (y), and can thus be used for unsupervised learning.
+
+### It will zero variance features
+from sklearn.feature_selection import VarianceThreshold
+var_thres=VarianceThreshold(threshold=0)
+var_thres.fit(data)
+
+var_thres.get_support()  #yane aaplala important feature true and not important false ne sangel becouse theshold=0 manje data madhe variation nahi jr yeka column madhe 100 hi value saglikde asel tr tamadhe variation nahe aani te aaplala important pn ny.
+
+data.columns[var_thres.get_support()]   #Important feature chi nave dakhavt fkt
+
+constant_columns = [column for column in data.columns
+                    if column not in data.columns[var_thres.get_support()]]
+
+print(len(constant_columns))   #ya varcha command mule not important column miltil
+
+
+  ########## correlation ############
+# with the following function we can select highly correlated features
+# it will remove the first feature that is correlated with anything other feature
+
+def correlation(dataset, threshold):
+    col_corr = set()  # Set of all the names of correlated columns
+    corr_matrix = dataset.corr()
+    for i in range(len(corr_matrix.columns)):
+        for j in range(i):
+            if abs(corr_matrix.iloc[i, j]) > threshold: # we are interested in absolute coeff value
+                colname = corr_matrix.columns[i]  # getting the name of column
+                col_corr.add(colname)
+    return col_corr
+
+
+corr_features = correlation(X_train, 0.7)
+len(set(corr_features))                      #using above code to remove those feature having the multicolinearity are present or drop one variable of the two variables. mesority above the 85% correlated feature must be removed otherwise not.
+
+   #########Mutual information gain - Classification###########
+
+from sklearn.feature_selection import mutual_info_classif
+# determine the mutual information
+mutual_info = mutual_info_classif(X_train, y_train) #yacha vapar aapn responce variable descrete nature che asel trch karto karn he information gain descsion tree sarkhach aahe je ki aapla responce variable la predict karnyasatho konte variable kiti imp aahet he sangt. varch aapn correlation responce contineous asel tr vapru shakto
+
+mutual_info = pd.Series(mutual_info)
+mutual_info.index = X_train.columns
+mutual_info.sort_values(ascending=False) #yane aapn information gain jast aslya nusar desending order ne data arrenge kela
+
+#let's plot the ordered mutual_info values per feature
+mutual_info.sort_values(ascending=False).plot.bar(figsize=(20, 8))   #bar plot karun baghitl
+
+
+from sklearn.feature_selection import SelectKBest  # yacha vapar karun aapla varcha information madhle top jevde haved tevde variable extract karu shakto
+
+#No we Will select the  top 5 important features
+sel_five_cols = SelectKBest(mutual_info_classif, k=5)
+sel_five_cols.fit(X_train, y_train)
+X_train.columns[sel_five_cols.get_support()]  #top five imp feature distil
+
+
+########Mutual information gain - Regression###########
+
+from sklearn.feature_selection import mutual_info_regression
+# determine the mutual information
+mutual_info = mutual_info_regression(X_train, y_train)
+mutual_info
+
+ #rahilele sagle same classifcation sarkhch fkt regression add honar regression contineous target asel tr
+
+## Selecting the top 20 percentile
+selected_top_columns = SelectPercentile(mutual_info_regression, percentile=20)
+selected_top_columns.fit(X_train, y_train)  #kiva regression sathi kbest cha jagi percentile pn vapru shakto jeki top 20 percent best asnar feature aaplala disnar
+
+selected_top_columns.get_support()
+
+X_train.columns[selected_top_columns.get_support()]
+
+

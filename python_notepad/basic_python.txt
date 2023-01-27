@@ -1,0 +1,178 @@
+-   ########  Basic of python   ##########
+
+  ###  variables of python  ###
+
+1. profit=2600   #integer
+2. height=6.3    #flot
+3. name="rahul"  #string
+4. h=True        #boolen
+5. x=3+2j        #complex
+
+Check the type of each variable using : type(variable_name)
+
+  ###  Operators in Python  ###
+
+1. print(1+2)  #addition
+2. print(1-2)  #subtraction
+3. print(1*2)  #multiplication
+4. print(1/2)  #division
+5. print(3//2) #floor division - show only inter value after dividing the numbers
+6. print(3%2)  #modulo - show the remender value after dividing the numbers
+
+## convert inter into binarary number ##
+print(format(4,'b'))  #convert given inter into binary number
+bin(4)
+
+  ###  String introduction  ###
+
+  food="samosa"
+       food[2]          #indexing - access perticuler character in the above string value
+       food[-3:-1]      #string slicing - acces more than one character using slicing
+       len(food)        #check how nany character in that strin word - count of string
+       'a' in food      #in operator - check a are in food if yes then display True
+  
+    ## replace function ##
+
+       food[0]='x'                               #throw error - becouse string are not repace periculer word using that method
+       foodname.replace('jalebi','biryani')      #correct way - for replace string charater into other characters
+
+   ### upper and lower function ###
+
+       food.upper()      #convert all string into upper case letter
+       food.lower()      #convert all string into lower case letter
+       food.title()      #firt letter of each word is capital
+
+   #### Dir fuction  ####
+      
+     dir(food)    # that function shows all passible function list for that use into perform various oprations the that word
+
+  ###  Newline and tab command ###
+ 
+    text2='hey\nbro'  :print(text2)  #this use for new line
+     text1='hey\tbro'  :print(text1)  #this use for new tab
+
+    print(f'Test between {first} and {last}') #f-string
+
+       ###  user input  ###
+
+    a=int(input("Enter the any number:"))
+    b=int(input("Enter the second number:"))
+    c=a+b
+
+    #########   List  ##########1.changeble 2.allows dublicate item 3.it is ordered and indexted 4.it shows in square bracket
+
+  mithai=['halwa','kheer','jalebi','gulab jamun']
+  mithai
+  mithai[0]                           #indexing
+  mithai[1:3]                         #slicing
+  'kheer' in mithai                   #in opraretor ans in true or false type
+   mithai.append('ladu')              #add in last posission
+  mithai.insert(3,'rasgulle')         #add in thurd possition
+  food[0:4]=[2,4,6,8,9]               #skip 0to4 indexing and replace other numbers
+
+  food.pop()                          #delete in last posission value
+  food.pop(2)                         #delete in 3rd posission value
+  food.remove('sev')                  #remove that value if that value not present then through the error
+  food.discard('sev')                 #that value is not present not trough any error
+  del food[1]                         #delete first possition value
+  food.clear()                        #clare all the list
+  list1.extend(list2)                 #murge list2 in list1 at last possition
+  s1.reverse()                        #reverse the list
+  food.index('sev')	              #Returns the index of the first matched item
+  food.count('sev')	              #Returns the count of number of items passed as an argument
+  food.sort()	                      #Sort items in a list in ascending order
+  food.copy()	                      #Returns a copy of the list
+
+      #############   Tupple  ################1.round bracket 2.un-mutable(not changeble) 3.index but anchangeble 4.Allows duplicate values 5.add removie not possible
+
+   ## concatenate tupple ##
+
+       tuple1 = (0, 1, 2, 3)
+      tuple2 = ('python', 'geek')
+                                       # Concatenating above two
+       print(tuple1 + tuple2) 
+       tuple3 = (tuple1, tuple2)     #nested tupple
+       print(tuple1[::-1])           #slicing- reverse the all number
+       del tuple3                    #delete all tupple variable
+       print(tuple(list1))           #converting list into tupple
+       
+    ############  set  ##############1.is unorderd 2.use karly bracket 3.not allows duplicate value
+
+    myset = set(["a", "b", "c"])
+    print(myset)                             #convert given list into set
+    myset.add("d")                           #add value in set
+    set1.apdate(set2)                        #adding value of set2 in set1 on random order
+    set2.pop()                               #delete last value
+    set.discard('a') and set.remove('a')     #remove the value
+
+   ##########  dictionary  ########### 1.use karly bracket 2.it gives key and value pair 
+
+  Dict = {1: 'Geeks', 2: 'For', 3: 'Geeks'}     
+  Dict1= {'Name': 'Geeks', 1: [1, 2, 3, 4]}
+  Dict[0] = 'Geeks'                                 #add key value pair in dictionary
+  print(Dict[1])                                    #accesing element in dictionary
+  pop_ele = Dict.pop(1)                             #pop 1st key value in dict
+  pop_ele = Dict.popitem()                          #pop item
+  Dict.clear()                                      #clear dict
+  Dict.keys()                                       #acces keys in dict
+  Dict.values()                                     #acces values in dict
+  Dict.items()                                      ##acces keys and values in dict   
+
+   ##############  if condition  #############
+
+ a=int(input("Enter the number:"))
+
+if a>=0:
+    print("The given number is possitive")
+else:
+    print("The given number is negative")
+
+   ############### for loop  #############
+
+  for i in "wai":
+    print(i)
+
+  ######### while loop  #############
+ 
+  count = 0
+while (count < 3):   
+    count = count + 1
+    print("Hello Geek")
+
+   ############ creating function  ############
+
+   def addition(x):
+    '''
+    x is to inter list which can you get addition 
+    '''
+    sum=0
+    for i in range(len(x)):
+        sum +=x[i]
+    print(sum)
+                addition(bharat_expenses)
+
+   #############  Math function ###############
+
+   import math
+   math.pi
+   math.sqrt(4)
+
+   ###########  os function  #############
+
+   import os
+  os.chdir('file_path')       #using that function acces path in file 
+
+  ############  import files  #############
+
+  a=pd.read_csv('path/file_name.csv',header=None,names=[c1,c2,c3])  #file nature is csv
+  b=pd.read_excel('path/file_name.xlsx')                            #file nature is excel
+  c=pd.read_table('path/file_name.txt')                             #file nature is notepad or text formate
+  
+  import pyreadstat
+  d=pd.read_spss('path/file_name.sav')                              #file nature is spss formate
+
+  
+  ###########  export file  ############
+
+  dataset.to_csv("updated_dataset.csv",index=False)
+  

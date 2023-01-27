@@ -1,0 +1,229 @@
+         #############inbalence technieque #################
+whaever data inbalence in traing and testing phase so we use cross_validation technique but simplly data having response variable having two category 100 total observation in that 10 observation in categori 1 and other 90 in other category this problem is called inbalence data there are below four techniques mainly use to handdle inbalence data.
+1)under sampling 2)over sampling 3)SMOTE 4)insamble tehnique.
+   ############1)under sampling #############
+yat responce madhe 10 1st categoriche 90 2nd categoriche obsercation asel tr under sampling te 90 madhale fkt 10 sample randamly ghet manje 100 madhle 20 data tayar hoto doni pn categories same zala yala under sampling boltat.drowback sample size is reducess
+
+from imblearn.under_sampling import NearMiss
+s1=NearMiss()
+x2_data,y2_data=s1.fit_sample(x,y)        ##data la under sampling karun navin x and y tayar kele
+print(x2_data.shape,y2_data.shape)
+x2_train,x2_test,y2_train,y2_test=train_test_split(x2_data,y2_data,test_size=0.2,random_state=2)  #navin x and y la aata train test spit kele 
+
+
+
+########2)over sampling #########
+yat responce madhe 10 1st categoriche 90 2nd categoriche obsercation asel tr over sampling te 10 madhale 90 sample randamly bootstrap ne create kart dublicate.manje 100 madhe 80 extra data tayar hoto doni pn categories same zala(180) yala over sampling boltat.drowback data dupicate hote
+
+
+from imblearn.over_sampling import RandomOverSampler
+s1=RandomOverSampler()
+x2_data,y2_data=s1.fit_resample(x,y)        ##data la under sampling karun navin x and y tayar kele
+print(x2_data.shape,y2_data.shape)
+x2_train,x2_test,y2_train,y2_test=train_test_split(x2_data,y2_data,test_size=0.2,random_state=2)  #navin x and y la aata train test spit kele 
+
+
+
+  ############3)SMOTE(synthetic minority oversampling Technique)#############
+procedure is same as the over sampling methos but je sample reapeat gheto te yeka synthetic minority ne gheto
+
+from imblearn.over_sampling import SMOTE
+s1=SMOTE()
+x2_data,y2_data=s1.fit_resample(x,y)        ##data la under sampling karun navin x and y tayar kele
+print(x2_data.shape,y2_data.shape)
+x2_train,x2_test,y2_train,y2_test=train_test_split(x2_data,y2_data,test_size=0.2,random_state=2)  #navin x and y la aata train test spit kele
+
+
+
+ ###############4)insemble techniques #######################
+insemble techniqe hi train test madhe ny use hot tr tumcha data che bharpur tumi sangal tevde part karnar aani taver same kiva vegvegle model apply karun accuracy kadnar yeka model mule yevdi accuracy ny milat pn jast model tumi data che bhag karun apply keli tr strong result milel tumal.
+their are theree types of insemble techniqes 1)staking 2)bagging 3)boosting
+ 
+
+   ############voting classifier############
+yamadhe tumala jach prediction karaychay to data dya aani he tya yekach datavarti aapn kas yek model lavto ts he vegli vegli model lavt aani aaplala pratekachi saperate accuracy det aani aapn votting manje maximum accuracy jya model chi aahe te model select karto 
+
+log_clf=LogisticRegression()
+ran_clf=RandomForestClassifire()
+svm_clf=SVM()
+nbg_clf=GaussianNB()
+
+for i in (log_clf,ran_clf,sbm_clf,nbg_clf):
+  clf.fit(x_train,y_train)
+  y_pred=clf.predict(x_test)
+  print(clf._class_._name_,accuracy_score(y_test,y_pred))     #ith looping ne aapn accuracy kadli each model chi
+
+or
+from sklearn.ensamble import VotingClassifier
+voting_clf=VotingClassifier(estimators=[('lr',log_clf),('nb',log_clf),('svc',svm_clf)],voting='hard')
+
+for i in (log_clf,ran_clf,sbm_clf,nbg_clf,voting_clf):
+  clf.fit(x_train,y_train)
+  y_pred=clf.predict(x_test)
+  print(clf._class_._name_,accuracy_score(y_test,y_pred))    #ith pn varchagt kel pn voting chi pn accuracy yamadhe bghitli
+
+
+     ###############Bagging boostraping#################
+bagging he parallel kam kart votibg la aapn yekach dataset vaprla pn bagging la yek data che veg vegle group karto with repacement aani talach bootsrap mantl jate. aani yekach veli tya pratik dataset varti aapn yek kontapn vaparl tri chalel pn tya sagla group varr yeksarkh(yekch) model vaprun answer kadaych aani nantr tya pratek output madhun aalelya answer cha aggrigation ghaych tach procedure la boostrap aggrigation boltat.
+random subspace=manje all rows ghenar but subset of column cha ghenar manje ramdomly column madhe bootrap vaparle janar
+random patches= subset of column aani subset of row doni pn ghenar
+parameters:
+bootsrap=true : manje boostraping rows madhe keli janar , max_samples=1.0 : sagle sample ghenar, bootstrap_feature=False = column madhe boostraping ny karnar
+max_feature=1.0 = manje all column consider kart, oob_score=False = manje out of bag je rows select ny zale te consider ny kart jar true kel tr consider karel jeki aaplala train test vegl daychi grj ny,n_estimator=10 = kiti group karaychet aaplala te ,n_job=1 = manje yek processor us hoil -1 manje sagle prossesor use hotil data jast asel tr aapn -1 deto, base_estimator=RandomForestClassifier() by defult hech ast pn kont maode vaprnar aahe yasathi aahe he.
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+
+from slkearn.ensamble import BaggingRegressor   ### regression problem sathi
+from sklearn.ensamble import BaggingClassifier  #classification problem sathi
+
+from sklearn.matrics import accuracy_score
+from sklearn.model_selection import train_test_split
+
+bag_nb_clf=BaggingClassifier(GaussionNB(),n_estimators=500,max_samples=100,bootstrap=True,n_job=-1,oob_score=True)
+bag_nb_clf.fit(x_train,y_train)
+y_pred=bag_nb_clf.predict(x_test)
+print(accuracy_score(y_test,y_pred)
+bag_nb_clf.oob_score_                     #var tumi oob_score true dil trch he work hoil jeki sampling madhe naslele samplchi te outomatic accuracy det
+
+
+
+           ###########boosting techniqes ################
+yamadhe data ha sequential asto manje yek model jovr train hot ny tover aapn dusrya model varti jau shakt ny. manje yek data aadhi train honar aani nantr tya datavarti model prediction karnar aani jar prediction kahi observation che chukich asel tr te observation he puna dusrya model  vari training phase la janar.
+
+   ############Adaboosting #########
+yamadhe aapn initially weights assign karto modek manje pratek obervation la 1/n weight assign kelel ast n manje no of rows first model la he wight dilavr classification honar aani jar kahi obervation chukichi predict zali astil tr tancha according to wight wadhnar aani correct valanche wieght kami honar weght jast manje probobility hi jast aste te observation pudacha model madhe janyache as hot janar tachamule chukicha observation puna yek chance milto swatala improve karnyasathi.this procedure contineous upto n_estimator you have to mension. randomforest la stump=1 use hoto manje model yekach node var decision gheil yes ka no te yachamule ya slow lerner pn boltat.
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussionNB
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+
+from slkearn.ensamble import AdaBoostRegressor   ### regression problem sathi
+from sklearn.ensamble import AdaBoostClassifier  #classification problem sathi
+
+from sklearn.matrics import accuracy_score
+from sklearn.model_selection import train_test_split
+
+boost_nb_clf=AdaBoostClassifier(GaussionNB(),n_estimator=500,algorithm='SAMME,learning_rate=0.5)  
+boost_nb_clf.fit(x_train,y_train)
+y_pred=bboost_nb_clf.predict(x_test)
+print(accuracy_score(y_test,y_pred)    #DecisionTreeClassifier(max_depth=1)  stup dav lagek decision tree sathi
+
+
+    ################# gradient boosting ##################
+now gradient boosting is onather form of boosting in that algorithem you can send the error of next model not a weights. first you can genrate a model in your any algorithm after the result you can check the diffrecence between atual and predicted and nex model you use input as x variable but output is resudual of first model in this way we can learn predict the error of first model simillerly next 3rd model you can pass the error of 2nd model but pred3=pred1-0.1(pred2) simillerly pred3=pred1-(0.1(pred2)+0.1(pred3)) 0.1 is the learing rate means how to rate the model learn fast.here basically decision tree is most usefull now you and here allows the multiple factions of decision for predict the output
+
+
+   ############## extrime gradient boosting (xgboost) ###############
+this is also most usefull model working is same as the gradient disent dataset have more so theis is to be usefull its descrease the loss and encreases the accuracy.
+
+!pip3 install xgboost
+
+from google.colab import files
+
+uploaded = files.upload()
+
+for fn in uploaded.keys():
+  print('User uploaded file "{name}" with length {length} bytes'.format(
+      name=fn, length=len(uploaded[fn])))                                      #using that code create invormet for selecte the any data file in your browser
+
+uploaded
+import pandas as pd
+import io
+dataset=pd.read_csv(io.StringIO(uploaded['Churn_Modelling.csv'].decode('utf-8')))
+dataset.head()
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+#dataset = pd.read_csv('Churn_Modelling.csv')
+X = dataset.iloc[:, 3:13].values
+y = dataset.iloc[:, 13].values
+
+
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+labelencoder_X_1 = LabelEncoder()
+X[:, 1] = labelencoder_X_1.fit_transform(X[:, 1])
+labelencoder_X_2 = LabelEncoder()
+X[:, 2] = labelencoder_X_2.fit_transform(X[:, 2])
+onehotencoder = OneHotEncoder(categorical_features = [1])
+X = onehotencoder.fit_transform(X).toarray()
+X = X[:, 1:]
+
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+# Fitting XGBoost to the Training set
+from xgboost import XGBClassifier
+classifier = XGBClassifier()
+classifier.fit(X_train, y_train)                             #this is code for xgboost classication problem
+
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Applying k-Fold Cross Validation
+from sklearn.model_selection import cross_val_score
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
+accuracies.mean()
+accuracies.std()
+
+accuracies                # using cross validation also check the aacuracy how mach varies suppose sd=0.01 accuracy 90 means 1% variation means you data have go up                            #and down one meanse your accuracy variation between 89 to 91
+
+cm
+
+(1521+208)/271
+
+from sklearn.datasets import load_breast_cancer, load_diabetes, load_wine
+import xgboost as xgb
+from sklearn.metrics import auc, accuracy_score, confusion_matrix, mean_squared_error
+
+cancer = load_breast_cancer()
+
+X = cancer.data
+y = cancer.target
+
+xgb_model = xgb.XGBClassifier(objective="binary:logistic", random_state=42)
+xgb_model.fit(X, y)
+
+y_pred = xgb_model.predict(X)
+
+print(confusion_matrix(y, y_pred))
+
+
+
+                     ##XGboost resgression problem##
+import numpy as np
+diabetes = load_diabetes()
+
+X = diabetes.data
+y = diabetes.target
+
+xgb_model = xgb.XGBRegressor(base_score=0.5,objective="reg:linear", random_state=42) #use regression problem
+
+xgb_model.fit(X, y)
+
+y_pred = xgb_model.predict(X)
+
+mse=mean_squared_error(y, y_pred)
+
+print(np.sqrt(mse))
+
+
+
+
+
+
+

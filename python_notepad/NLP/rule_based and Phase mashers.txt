@@ -1,0 +1,225 @@
+      ############# Rule-based Matching ##############
+spaCy offers a rule-matching tool called Matcher that allows you to build a library of token patterns, then match those patterns against a Doc object to return a list of found matches. You can match on any part of the token including text and annotations, and you can add multiple patterns to the same matcher. For more:
+       (yekhadya sentence madhe tumala konta word tumala pahije tacha pattern tumi ithe dya mg te tumcha pattern  madhe jasa word dilay e sentence madhe shodhun tumala tom word konta index vrr aahe te sangel)
+
+import spacy
+nlp = spacy.load('en_core_web_sm')  #nlp ha text sathicha variable load kela
+
+ Import the Matcher library
+from spacy.matcher import Matcher  #word shodhay macher library load keli
+matcher = Matcher(nlp.vocab)      #aaple nlp variable read karay dila
+
+pattern1 = [{'LOWER': 'solarpower'}]     #create pattern ya pattern madhe jo shabd shodhaychay to lower letter madhe asel tri output la yava asa patter kela
+pattern2 = [{'LOWER': 'solar'}, {'LOWER': 'power'}]  #ith solar aani power ase velgle shabd asle tri tacha index show kara asa pattern creae kela
+pattern3 = [{'LOWER': 'solar'}, {'IS_PUNCT': True}, {'LOWER': 'power'}] #tya don shabdanmadhe kahu punctuation asle tri te output la dya as sangitl 
+
+matcher.add('SolarPower', None, pattern1, pattern2, pattern3) #aapla machers create kelay tamadhe aapla konta shabd shodhaychay te sangun he tin pattern add kele
+
+doc = nlp(u'The Solar Power industry continues to grow as demand \
+for solarpower increases. Solar-power cars are gaining popularity.')  #he sring aahe yatun aaplala aapla pattern shodhaychay
+
+found_matches = matcher(doc)
+print(found_matches)               #matcher la aapl string deun aapla word wegveglya pattern madhe aahe te shodhayla sangitl aani konta index la aahe aapla word to baghitl
+
+for match_id, start, end in found_matches:
+    string_id = nlp.vocab.strings[match_id]  # get string representation
+    span = doc[start:end]                    # get the matched span
+    print(match_id, string_id, start, end, span.text) #looping madhe takun aale konte word kashe mach zale kiva kontya index la match zale he baghuyat
+
+
+ Redefine the patterns:
+pattern1 = [{'LOWER': 'solarpower'}]
+pattern2 = [{'LOWER': 'solar'}, {'IS_PUNCT': True, 'OP':'*'}, {'LOWER': 'power'}]  #ith OP chi concept aanli ke yeka pekash jat vela match zal tr OP te show karnar
+
+# Remove the old patterns to avoid duplication:
+matcher.remove('SolarPower')       #adhiche patter delete kela
+
+# Add the new set of patterns to the 'SolarPower' matcher:
+matcher.add('SolarPower', None, pattern1, pattern2)  #navin pattern aad kela  OP vala
+
+found_matches = matcher(doc)
+print(found_matches)
+
+OP	Description
+\!	Negate the pattern, by requiring it to match exactly 0 times
+?	Make the pattern optional, by allowing it to match 0 or 1 times
+\+	Require the pattern to match 1 or more times
+\*	Allow the pattern to match zero or more times
+
+
+pattern1 = [{'LOWER': 'solarpower'}]
+pattern2 = [{'LOWER': 'solar'}, {'IS_PUNCT': True, 'OP':'*'}, {'LEMMA': 'power'}] # CHANGE THIS PATTERN ithe lamma add kela jeki base work dilay jenekarun base word sudha te answer deil.
+
+# Remove the old patterns to avoid duplication:
+matcher.remove('SolarPower')
+
+# Add the new set of patterns to the 'SolarPower' matcher:
+matcher.add('SolarPower', None, pattern1, pattern2)
+
+doc2 = nlp(u'Solar-powered energy runs solar-powered cars.')  #var patter madhe solerpower word shodhay lavlay pn emma power aslamule solar powered jari shabd asla tri te mathch karun sangel aaplala
+
+
+
+
+          ############ PhraseMatcher ###########
+In the above section we used token patterns to perform rule-based matching. An alternative - and often more efficient - method is to match on terminology lists. In this case we use PhraseMatcher to create a Doc object from a list of phrases, and pass that into matcher instead.
+    (varti pattern tayar kart hoto aani tyachanusar aaplala answer yet hote ithe aapn te word derect yeka list madhe dile aani aahe teshe word he mach honar aapla sentence madhun yalach phase match as boltat)
+
+import spacy
+nlp = spacy.load('en_core_web_sm')
+
+from spacy.matcher import PhraseMatcher
+matcher = PhraseMatcher(nlp.vocab, attr='LOWER')  #phase matcher libary yasathi import keli
+
+terms = ['Galaxy Note', 'iPhone 11', 'iPhone XS', 'Google Pixel']  #je word match karaychet te aapla list madhe dilet
+patterns = [nlp(text) for text in terms]
+matcher.add("TerminologyList", None, *patterns)  #to patter ithe add kela same varchagat
+ 
+# Borrowed from https://daringfireball.net/linked/2019/09/21/patel-11-pro
+text_doc = nlp("Glowing review overall, and some really interesting side-by-side "
+               "photography tests pitting the iPhone 11 Pro against the "
+               "Galaxy Note 10 Plus and last year’s iPhone XS and Google Pixel 3.") 
+matches = matcher(text_doc)
+print(matches)         #sentence deun varchagat same baghit konte maching word kontya possition la aahet
+
+
+         ############ Part of the speech(POS) ###########
+yacha vaper karun aapn aaolya word chi complete information baghto tacha lemma ky aahe tag ky aahe shape ky aahe stopword aahe ka kiva alphabet aahe ka sagl bghto
+
+Recall that you can obtain a particular token by its index position.
+
+To view the coarse POS tag use token.pos_    #yacha paper karun pos ky aahe he baghto
+To view the fine-grained tag use token.tag_  #tag ky aahe
+To view the description of either type of tag use spacy.explain(tag) #sagli information tya word chi he explain kart
+
+nlp = spacy.load("en_core_web_sm")
+doc = nlp("Apple is looking at buying U.K. startup for $1 billion")
+
+for token in doc:
+    print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
+            token.shape_, token.is_alpha, token.is_stop)    #ya code cha vaper karun sagli information baghuyat.
+
+import spacy
+nlp = spacy.load('en_core_web_sm')
+
+# Create a simple Doc object
+doc = nlp(u"The quick brown fox jumped over the lazy dog's back.")
+print(doc.text)
+
+print(doc[4].text, doc[4].pos_, doc[4].tag_, spacy.explain(doc[4].tag_)) # yane 4th numbe cha word chi iformation dili
+
+for token in doc:
+    print(f'{token.text:{10}} {token.pos_:{8}} {token.tag_:{6}} {spacy.explain(token.tag_)}')   ##looping madhe deun one by one saglya word chi information baghitli
+
+   #######vegle formates of tages aani tanchi information######
+
+     ########Coarse-grained Part-of-speech Tags #######
+Every token is assigned a POS Tag from the following list:
+
+POS	DESCRIPTION	           EXAMPLES
+ADJ	adjective	           *big, old, green, incomprehensible, first*
+ADP	adposition	           *in, to, during*
+ADV	adverb	                   *very, tomorrow, down, where, there*
+AUX	auxiliary	           *is, has (done), will (do), should (do)*
+CONJ	conjunction	           *and, or, but*
+CCONJ	coordinating conjunction   *and, or, but*
+DET	determiner	           *a, an, the*
+INTJ	interjection	           *psst, ouch, bravo, hello*
+NOUN	noun	                   *girl, cat, tree, air, beauty*
+NUM	numeral	                   *1, 2017, one, seventy-seven, IV, MMXIV*
+PART	particle	           *'s, not,*
+PRON	pronoun	                   *I, you, he, she, myself, themselves, somebody*
+PROPN	proper noun         	   *Mary, John, London, NATO, HBO*
+PUNCT	punctuation	           *., (, ), ?*
+SCONJ	subordinating conjunction  *if, while, that*
+SYM	symbol                 	   *$, %, §, ©, +, −, ×, ÷, =, :), 😝*
+VERB	verb	                   *run, runs, running, eat, ate, eating*
+X	other	                   *sfpksdpsxmsa*
+SPACE	space
+
+    ##########Fine-grained Part-of-speech Tags##########
+Tokens are subsequently given a fine-grained tag as determined by morphology:
+
+POS	Description	Fine-grained Tag	     Description	    Morphology
+ADJ	adjective	AFX	                       affix	Hyph=yes
+ADJ		        JJ	adjective	Degree=pos
+ADJ		        JJR	adjective, comparative	Degree=comp
+ADJ		        JJS	adjective, superlative	Degree=sup
+ADJ		        PDT	predeterminer	AdjType=pdt PronType=prn
+ADJ		        PRP$	pronoun, possessive	PronType=prs Poss=yes
+ADJ		        WDT	wh-determiner	PronType=int rel
+ADJ		        WP$	wh-pronoun, possessive	Poss=yes PronType=int rel
+ADP	adposition	IN	conjunction, subordinating or preposition	
+ADV	adverb	        EX	existential there	AdvType=ex
+ADV		        RB	adverb	Degree=pos
+ADV		        RBR	adverb, comparative	Degree=comp
+ADV		        RBS	adverb, superlative	Degree=sup
+ADV		        WRB	wh-adverb	PronType=int rel
+CONJ	conjunction	CC	conjunction, coordinating	ConjType=coor
+DET	determiner	DT	determiner	
+INTJ	interjection	UH	interjection	
+NOUN	noun	        NN	noun, singular or mass	Number=sing
+NOUN		        NNS	noun, plural	Number=plur
+NOUN		        WP	wh-pronoun, personal	PronType=int rel
+NUM	numeral 	CD	cardinal number	NumType=card
+PART	particle        POS	possessive ending	Poss=yes
+PART		        RP	adverb, particle	
+PART		        TO	infinitival to	PartType=inf VerbForm=inf
+PRON	pronoun	        PRP	pronoun, personal	PronType=prs
+PROPN	proper          noun	NNP	noun, proper singular	NounType=prop Number=sign
+PROPN		        NNPS	noun, proper plural	NounType=prop Number=plur
+PUNCT	punctuation	-LRB-	left round bracket	PunctType=brck PunctSide=ini
+PUNCT		        -RRB-	right round bracket	PunctType=brck PunctSide=fin
+PUNCT		         ,	punctuation mark, comma	PunctType=comm
+PUNCT		         :	punctuation mark, colon or ellipsis	
+PUNCT		         .	punctuation mark, sentence closer	PunctType=peri
+PUNCT		        ''	closing quotation mark	PunctType=quot PunctSide=fin
+PUNCT		        ""	closing quotation mark	PunctType=quot PunctSide=fin
+PUNCT		        ``	opening quotation mark	PunctType=quot PunctSide=ini
+PUNCT		        HYPH	punctuation mark, hyphen	PunctType=dash
+PUNCT		        LS	list item marker	NumType=ord
+PUNCT		        NFP	superfluous punctuation	
+SYM	symbol	         #	symbol, number sign	SymType=numbersign
+SYM		         $	symbol, currency	SymType=currency
+SYM		        SYM	symbol	
+VERB	verb	        BES	auxiliary "be"	
+VERB		        HVS	forms of "have"	
+VERB		        MD	verb, modal auxiliary	VerbType=mod
+VERB		        VB	verb, base form	VerbForm=inf
+VERB		        VBD	verb, past tense	VerbForm=fin Tense=past
+VERB		        VBG	verb, gerund or present participle	VerbForm=part Tense=pres Aspect=prog
+VERB		        VBN	verb, past participle	VerbForm=part Tense=past Aspect=perf
+VERB		        VBP	verb, non-3rd person singular present	VerbForm=fin Tense=pres
+VERB		        VBZ	verb, 3rd person singular present	VerbForm=fin Tense=pres Number=sing Person=3
+X	other	        ADD	email	
+X		        FW	foreign word	Foreign=yes
+X		        GW	additional word in multi-word expression	
+X		        XX	unknown	
+SPACE	space	        _SP	space	
+NIL	missing tag
+
+doc = nlp(u'I read a book on NLP.')
+r = doc[1]
+
+print(f'{r.text:{10}} {r.pos_:{8}} {r.tag_:{6}} {spacy.explain(r.tag_)}')  #sentence madhelya 1st index cha word chi information aali
+
+doc = nlp(u'I read books on NLP.')
+r = doc[1]
+
+print(f'{r.text:{10}} {r.pos_:{8}} {r.tag_:{6}} {spacy.explain(r.tag_)}') #varti stament madhe book hot ith books aahe mg aapla spacy ya asha la konat tence sangto kiva ky convertion karto he important aahe
+
+doc = nlp(u"The quick brown fox jumped over the lazy dog's back.")
+
+# Count the frequencies of different coarse-grained POS tags:
+POS_counts = doc.count_by(spacy.attrs.POS)
+POS_counts             #key value paire madhe coding kele
+
+doc.vocab[83].text   #83 ha code decode kela
+
+
+    ###### Create a frequency list of POS tags from the entire document
+Since POS_counts returns a dictionary, we can obtain a list of keys with POS_counts.items().
+By sorting the list we have access to the tag and its count, in order.
+
+for k,v in sorted(POS_counts.items()):
+    print(f'{k}. {doc.vocab[k].text:{5}}: {v}')

@@ -1,0 +1,524 @@
+       ########### unsupervesed machine learnig porblem - clustering  ############
+
+    ############# K-mean clustering ###########
+  Data are unlabeled, how many cluster are created are use in K clusters . using kmean++ create first k point in largest distance and then suppse k=3 so 3 clusters pont in varius distances and find ecludean distance of that pont and mininum distence point merge to that ponit of the using mean so on reapeat procedure in all point are covered 
+
+import numpy as np 
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+os.chdir('E:/pay/python infosis/0.datasets')
+
+dataset = pd.read_csv('Mall_Customers.csv')
+dataset
+
+x = dataset.iloc[:,[3,4]].values               #that method use independant variable not for dependand
+x
+
+from sklearn.cluster import KMeans
+wcss=[]
+for i in range(1,11):
+    kmeans=KMeans(n_clusters=i,init='k-means++',random_state=0)
+    kmeans.fit(x)
+    wcss.append(kmeans.inertia_)
+plt.plot(range(1,11),wcss)
+plt.title("the elbo mothod")
+plt.xlable('Number of clusters')
+plt.ylable('wcss')
+plt.show()                                                   #using that all programme create dendogram for how many cluster are actully we can created
+
+kmeans=KMeans(n_clusters=5,init='k-means++',random_state=0)
+y_kmeans=kmeans.fit_predict(x)                                   #fit a model to create y_means cluster variable
+
+plt.scatter(x[y_kmeans==0,0], x[y_kmeans==0,1], s=100, c='red', label='Cluster1')
+plt.scatter(x[y_kmeans==1,0], x[y_kmeans==1,1], s=100, c='blue', label='Cluster2')
+plt.scatter(x[y_kmeans==2,0], x[y_kmeans==2,1], s=100, c='green', label='Cluster3')
+plt.scatter(x[y_kmeans==3,0], x[y_kmeans==3,1], s=100, c='cyan', label='Cluster4')
+plt.scatter(x[y_kmeans==4,0], x[y_kmeans==4,1], s=100, c='magenta', label='Cluster5')
+plt.scatter(kmeans.cluster_centers_[:,0],kmeans.cluster_centers_[:,1],s=300,c='yellow',label='centroids')
+plt.title("cluster of cluster")
+plt.xlable('annual income')
+plt.ylable('spending score')
+plt.legend()
+plt.show()                                    #show the scatter grap to the show plotted clusters
+
+
+
+          ################ Herarchical Clustering #######################
+herarchical clustering have two tyes agglomerative and divisive when agglomarative means each indivisual point are connect each other and finally get an one cluster or divisive is also work from same as agglomerative one cluster divide and create each point are saperate.
+single linkeage-means link the two cluster using min(p1,[p2,p3])
+complete linkage- means link the two cluster using max(p1,[p2,p3])
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+dataset = pd.read_csv('KMeans.csv')
+X = dataset.iloc[:, [1, 2]].values
+
+import scipy.cluster.hierarchy as sch
+dendrogram = sch.dendrogram(sch.linkage(X, method='ward')) #method=single,complete,centroid
+plt.title('Dendogram')
+plt.xlabel('Customer')
+plt.ylabel('Distances')                                               #create an dendogram it will use for selection of clusters
+plt.show();
+
+from sklearn.cluster import AgglomerativeClustering
+hc = AgglomerativeClustering(n_clusters = 5, affinity ='euclidean', linkage = 'ward' )
+y_hc=hc.fit_predict(X)
+
+
+
+# Visualising the clusters
+plt.scatter(X[db == 0, 0], X[db == 0, 1], s = 100, c = 'red', label = 'Cluster 1')
+plt.scatter(X[db == 1, 0], X[db == 1, 1], s = 100, c = 'blue', label = 'Cluster 2')
+plt.scatter(X[db == 2, 0], X[db == 2, 1], s = 100, c = 'green', label = 'Cluster 3')
+plt.scatter(X[db == 3, 0], X[db == 3, 1], s = 100, c = 'cyan', label = 'Cluster 4')
+plt.title('Clusters of customers')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+plt.legend()
+
+
+     #####################DBSCAN(density based spetial clustering of application with noice  ###################
+
+here the cluster ane ring formate mean outer one ring is one saperate and insite ring is saperate data so in that case above clusters are not applicable in that case we use DBSCAN this metheod saperate data into high density and low density if data point is far away from the cluster so that method not include that point inste any cluster   eps:create density curve around data point if pont outsite that circle means that pont is outlier
+          minpts:how many minimum point insite circle is choose so it depend upon dimension(D) of dataset as,minpt>D+1 or atlist 3.
+three types of datapoints 1)core point:point insite circle   2)border: point present in border of circle  3)noice : point present in outside of circle
+
+from sklearn.cluster import DBSCAN
+from sklearn import metrics
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import NearestNeighbors
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+dataset = pd.read_csv('KMeans.csv')
+X = dataset.iloc[:, [1, 2]].values
+X = StandardScaler().fit_transform(X)
+
+ns = 3
+nbrs = NearestNeighbors(n_neighbors=ns).fit(X)
+distances, indices = nbrs.kneighbors(X)
+distanceDec = sorted(distances[:,ns-1], reverse=True)
+plt.plot(indices[:,0], distanceDec)
+
+db = DBSCAN(eps=0.3, min_samples=5).fit(X)
+core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+core_samples_mask[db.core_sample_indices_] = True
+labels = db.labels_
+
+# Number of clusters in labels, ignoring noise if present.
+n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+n_noise_ = list(labels).count(-1)
+
+print('Estimated number of clusters: %d' % n_clusters_)
+print('Estimated number of noise points: %d' % n_noise_)
+
+
+import matplotlib.pyplot as plt
+# Black removed and is used for noise instead.
+unique_labels = set(labels)
+colors = [plt.cm.Spectral(each)
+          for each in np.linspace(0, 1, len(unique_labels))]
+for k, col in zip(unique_labels, colors):
+    if k == -1:
+        # Black used for noise.
+        col = [0, 0, 0, 1]
+
+    class_member_mask = (labels == k)
+
+    xy = X[class_member_mask & core_samples_mask]
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+             markeredgecolor='k', markersize=14)
+
+    xy = X[class_member_mask & ~core_samples_mask]
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col),
+             markeredgecolor='k', markersize=6)
+
+plt.title('Estimated number of clusters: %d' % n_clusters_)
+plt.show()
+
+
+
+
+
+
+                  ############## assosication concept of unsupervised learning it used for most of marketing becouse which product are associated with anather #####
+
+now i have data on customer they have to give an sum products we check the association for customer perches breade what chanses of they also perches buttter milk ect
+so after chacking that assiciate i desite che chances of which percest comstomer perches of produs also give an supportive other product as well.
+
+There are theree type of the assiciation rule 1)apriori algorithm 2)Eclat  3)FP-growth aloorithm
+
+  ############################ Apriori Algorithm ################
+that apriori algorithum is create a pairing of the each associated product and give the result accordigly.
+Example: there are 2000 count of all data having 200 customer give jam 300 gives bread and 100 perches jam and bred
+That alorithm use three parameters 1)support 2)confidence 3)lift
+suppot = #of perticuler product/#total no of all product  = 200/2000=10% means all dataset have 10% of the product will sell in the jam
+confidence = #of both product/#of perticuler product = 100/200 =50% means if you can perches jam so 50% customer also perches bred with jam
+lift= confidence/support =50/10 =5 means 5%customer in all dataset jam ghetla tr tasobt bread suddha ghetat
+
+!pip install apyori
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Data Preprocessing
+dataset = pd.read_csv('Market.csv', header = None)
+transactions = []
+for i in range(0, 7501):
+    transactions.append([str(dataset.values[i,j]) for j in range(0, 20)])  #data la list madhe convert karun ghetla
+
+# Training Apriori on the dataset
+from apyori import apriori
+rules = apriori(transactions, 
+                min_support = 0.003,   #3*7(weak)/7501
+                min_confidence = 0.2,  #lenth 2 aahe manun 0.2
+                min_lift = 3,           #give the all records for 3% customer gives two poroduct yeka sobat yek
+                min_length = 2)    #kiti product chi paring karaychiye 2 2chi ka 3 as tr ithe 2chi paring karaychi
+
+# Visualising the results
+MB = list(rules)
+Result = [list(MB[i][0]) for i in range(0,len(MB))]
+
+
+############################ Eclat Algorithm ################
+
+this algorithm is subset of the apriori algorithm aprori algorith give surch of result in horizontal manner but her eclat is surch appearance in horizontal manner so in that case this gives more caccurate result as comare to ariori here only one parameter used this is an minimum support 
+steps: 1)first select minimum supprt
+       2)select maximum values of the support in datasent of an minimum support
+       3)order that value in accending order
+
+supporse k=1,2,3,4,... set kel aani minimum support 2 thevla tr bghaych ki 2 kiva 2 pekasha jast paring madhe kiti observation ahhet ani te select karayche 2chi paring madhe changle parameter aahet kiva data jast aslamule aapn ithe k chi value 2 thevli aahe
+
+#pip install mlxtend 
+#pip install --no-binary :all: mlxtend
+
+
+import numpy as np
+import pandas as pd
+
+transactions = [[1, 2, 5],
+                [2, 4],
+                [2, 3],
+                [1, 2, 4],
+                [1, 3],
+                [2, 3],
+                [1, 3],
+                [1, 2, 3, 5],
+                [1, 2, 3]]
+
+'''
+# Importing dataset
+dataset = pd.read_csv('Market.csv',names=np.arange(1,21))
+
+# Preprocesing data to fit model
+transactions = []
+for sublist in dataset.values.tolist():
+    clean_sublist = [item for item in sublist if item is not np.nan]
+    transactions.append(clean_sublist)
+  
+'''
+
+
+
+from mlxtend.preprocessing import TransactionEncoder
+te = TransactionEncoder()
+te_ary = te.fit(transactions).transform(transactions)
+df_x = pd.DataFrame(te_ary, columns=te.columns_) # encode to onehot
+
+# Train model using Apiori algorithm 
+# ref = https://rasbt.github.io/mlxtend/api_subpackages/mlxtend.frequent_patterns/
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
+df_sets = apriori(df_x, min_support=0.005, use_colnames=True)
+df_rules = association_rules(df_sets,metric='support',min_threshold= 0.005,support_only=True)  #yamadhe yekach parameter aahe support cha
+# if you use only "support", it called "ECLAT"
+
+
+     ############################ FP-growth Algorithm ################
+ if the any dataset have to check the which product will repeated or perches the customer in most repeatedly so in that case this algorith is mostly use it shows the most frequent patten in the perticuler product.
+in that algorithem firt check or count the all product name is highly friquented and accordingly that product can arrenge in decending order  and then perticuler order of the rows arrenge in that pattern and after arrenging create the tree of that patten and connet each othe this way check the patten and lastly put the confidence value according to that value pc show the pair of the product
+
+'''/// Very Basic Example for Fp_Growth
+firsrt install ...
+pip install pyfpgrowth
+then, execute the below code!'''
+
+import numpy as np
+import pandas as pd
+import pyfpgrowth
+
+'''
+transactions = [[1, 2, 5],
+                [2, 4],
+                [2, 3],
+                [1, 2, 4],
+                [1, 3],
+                [2, 3],
+                [1, 3],
+                [1, 2, 3, 5],
+                [1, 2, 3]]
+'''
+
+dataset = pd.read_csv('Market.csv', header = None)
+transactions = []
+for sublist in dataset.values.tolist():
+    clean_sublist = [item for item in sublist if item is not np.nan]  #not write that command
+    transactions.append(clean_sublist) 
+
+
+
+patterns = pyfpgrowth.find_frequent_patterns(transactions, 2)   #2 means paring by two products
+
+rules = pyfpgrowth.generate_association_rules(patterns, 0.7)
+
+
+    #################### Principle Component Analysis  ########################
+
+this is dimentionality reduction. when independant variable is more then complexity arrises or some variable are redundat so this technik are used. frecher selection and feacher extraction is most important. If i use PCA so multicolineary problem is reduce and assign all the wights in one component in all variables. 1st component will expane more information of the data as compare to the others variables.This is unsupervised technique becouse we not use responce for creating the component.
+
+# Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Importing the dataset
+dataset = pd.read_csv('Wine.csv')
+X = dataset.iloc[:, 0:13].values
+y = dataset.iloc[:, 13].values
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+# Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# Applying PCA
+from sklearn.decomposition import PCA
+pca = PCA(n_components = 2)                    #using last expain variation code disite how many component are give in the model
+X_train = pca.fit_transform(X_train)
+X_test = pca.transform(X_test)
+explain_variance = pca.explained_variance_ratio_   #that code is used to check the what componet will expaine what amount of variaation 
+
+# Fitting Logistic Regression to the Training set
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression(random_state = 0)
+classifier.fit(X_train, y_train)                     #x variable are reduce and only two variable are given and responce is categorical so use logistic to check result
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)                #check the accuracy
+
+# Visualising the Training set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_train, y_train
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green', 'blue')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green', 'blue'))(i), label = j)        #this codes shows the how the dataset will train 
+plt.title('Logistic Regression (Training set)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+plt.show()
+
+# Visualising the Test set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_test, y_test
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green', 'blue')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green', 'blue'))(i), label = j)
+plt.title('Logistic Regression (Test set)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()                                     #this result shows what decision give data in the output side
+plt.show()
+
+
+
+   ############## Linear Discriminat analysis  #################
+
+This is also a dimension reduction techniqe to use for the only responce variable are catagorical nature. This is the supervised technique
+Pca he fkt independant data gheun demension recduction kart pn kahi point yekacha vrr overlap zalele astat tamule accuracy la problem yoto pn aapn aapla responce variable training pahse madhe dila aani mg jr dimension kel tr tya responce la bghun aaple dataset vegle hotant aani tapramanne adjust karun navin dimension tayar hot jate.  yachamule accuracy vadte. pn hi techniqe classification problem lach use keli jate.
+
+# Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Importing the dataset
+dataset = pd.read_csv('Wine.csv')
+X = dataset.iloc[:, 0:13].values
+y = dataset.iloc[:, 13].values
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+# Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# Applying LDA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+lda = LDA(n_components =2)
+X_train = lda.fit_transform(X_train,y_train)     #same varacha gt aahe pn ithe LDA vaparl jeki accuracy high milali ith training pahase la x_train aani y_train dav lagl
+X_test = lda.transform(X_test)
+
+
+# Fitting Logistic Regression to the Training set
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression(random_state = 0)
+classifier.fit(X_train, y_train)
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Visualising the Training set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_train, y_train
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green', 'blue')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green', 'blue'))(i), label = j)
+plt.title('Logistic Regression (Training set)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+plt.show()
+
+# Visualising the Test set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_test, y_test
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green', 'blue')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green', 'blue'))(i), label = j)
+plt.title('Logistic Regression (Test set)')
+plt.xlabel('PC1')
+plt.ylabel('PC2')
+plt.legend()
+plt.show()
+
+
+   ################ kernal Principal Component Analysis #################
+
+yamadhe same aaple pca sarkhach aahe pn aapla data linearly saperable nasto mixed formate madhe asel tr aapn he pca cha vapar karun vegle kurnel apply karyn saprate karto aani tachapramane result milto aaplala.linearly seprable data nasel tr use karto
+
+# Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Importing the dataset
+dataset = pd.read_csv('LR.csv')
+X = dataset.iloc[:, [0, 1]].values
+y = dataset.iloc[:, 2].values
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+
+# Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# Applying Kernel KPCA
+from sklearn.decomposition import KernelPCA
+kpca =KernelPCA(n_components = 2, kernel ='rbf')#pca srkach he component wise data seprate karel pn yamadhe pan jast yekat yek data asek tr kernel vaprun saperate karu
+X_train = kpca.fit_transform(X_train)
+X_test =kpca.transform(X_test)
+
+
+# Fitting Logistic Regression to the Training set
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression(random_state = 0)
+classifier.fit(X_train, y_train)
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Visualising the Training set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_train, y_train
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green'))(i), label = j)
+plt.title('Logistic Regression (Training set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()
+
+# Visualising the Test set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_test, y_test
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green'))(i), label = j)
+plt.title('Logistic Regression (Test set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()
+
+
+

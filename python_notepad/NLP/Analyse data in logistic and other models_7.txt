@@ -1,0 +1,135 @@
+        ########### impliment the spam filterning data which have an text variable to analyze the conclude output the massage gose for spam or not##############
+#### useing logistic regression,svr,navebise,knn ######
+
+from google.colab import files
+
+uploaded = files.upload()
+
+for fn in uploaded.keys():
+  print('User uploaded file "{name}" with length {length} bytes'.format(
+      name=fn, length=len(uploaded[fn])))      #choose file to load data in google colab
+
+   #######Perform Imports and Load Data###
+For this exercise we'll be using the SMSSpamCollection dataset from UCI datasets that contains more than 5 thousand SMS phone messages.
+
+label - every message is labeled as either ham or spam
+message - the message itself
+length - the number of characters in each message
+punct - the number of punctuation characters in each message #these are variable names in our datasets
+
+import numpy as np
+import pandas as pd
+
+df = pd.read_csv('smsspamcollection.tsv', sep='\t')
+df.head()                                         #import and show data in pd formate
+
+len(df)               #how many rows are avilable
+df.isnull().sum()     #any missing or null value is present or not
+df['message'].unique()    #check uniqe masage
+df['message'].value_counts()  #what is count of the massage
+
+   #########Visualize the data: ######
+Since we're not ready to do anything with the message text, let's see if we can predict ham/spam labels based on message length and punctuation counts. We'll look at message length first:
+
+df['label']
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+plt.xscale('log')
+bins = 1.15**(np.arange(0,50))
+plt.hist(df[df['label']=='ham']['length'],bins=bins,alpha=0.8)
+plt.hist(df[df['label']=='spam']['length'],bins=bins,alpha=0.8)
+plt.legend(('ham','spam'))
+plt.show()                       #check histogram of the responce variable
+
+df['punct'].describe()   #give an detailed information of punctuation column
+
+plt.xscale('log')
+bins = 1.5**(np.arange(0,15))
+plt.hist(df[df['label']=='ham']['punct'],bins=bins,alpha=0.8)
+plt.hist(df[df['label']=='spam']['punct'],bins=bins,alpha=0.8)
+plt.legend(('ham','spam'))
+plt.show()                   #show the histogram on punctuation column
+
+X = df[['length','punct']]  # note the double set of brackets
+y = df['label']                  #split the data in the dependant and independant variable
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=42)
+
+print('Training Data Shape:', X_train.shape)
+print('Testing Data Shape: ', X_test.shape)       #split data in traning and testing part
+
+from sklearn.linear_model import LogisticRegression
+lr_model = LogisticRegression(solver='lbfgs')
+lr_model.fit(X_train, y_train)        #simply apply the logistic regression on our last two variable which are present inside the datasets.
+
+from sklearn import metrics
+predictions = lr_model.predict(X_test)
+print(metrics.confusion_matrix(y_test,predictions))    #check confusion matrix
+
+df = pd.DataFrame(metrics.confusion_matrix(y_test,predictions), index=['ham','spam'], columns=['ham','spam'])
+df                      #convert confusion matrix in dataframe
+
+print(metrics.classification_report(y_test,predictions))   #check allover report
+
+print(metrics.accuracy_score(y_test,predictions))   #finally check the accuracy
+
+X_train.shape   #check the shape
+
+
+
+############# Now use TF_IDF and count vectorizer to apply text colum and train test data and apply the model ############
+I)
+from sklearn.feature_extraction.text import CountVectorizer
+count_vect=CountVectorizer()
+X_train_counts =count_vect.fit_transform(X_train)   #use count vectorizer to fit training data
+
+X_train_counts.shape  #check the shape of training data after appling count vectorizer
+
+II)
+from sklearn.feature_extraction.text import TfidfTransformer
+tfidf_transformer = TfidfTransformer()
+X_train_tfidf =tfidf_transformer.fit_transform(X_train_counts)  #same in tfidf vr kara
+
+III)varche don nastil karayche tr khalche option aahe tya doni na
+from sklearn.feature_extraction.text import TfidfVectorizer
+tfidf_transformer = TfidfVectorizer()
+X_train_tfidf =tfidf_transformer.fit_transform(X_train_counts) #ha option aahe
+
+
+#######varchi procedure karun nantr xtrain vr aaply karun puna x_test var apply karayla code lihava lagto tyapeksha yeka pipline madhe he sagl shortcut madhe houn jat##########
+
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+
+text_clf = Pipeline([('tfidf', TfidfVectorizer()),
+                     ('clf', LogisticRegression()),])
+text_clf.fit(X_train, y_train)   #doni regressin aani tfidf tayar kelel yekach variable madhe store karun direct apply kel tri chalel8
+
+predictions = text_clf.predict(X_test)   #train kelay test pn baghitl
+
+from sklearn import metrics
+print(metrics.confusion_matrix(y_test,predictions))  #confusion matrix
+
+print(metrics.classification_report(y_test,predictions))  #all report
+print(metrics.accuracy_score(y_test,predictions))   #accuracy
+
+
+
+############ same logistic sarkhi procedure bakicha algorith la aahe fkt logistic cha jagi he algorithms replace karun accuracy bagha###########
+
+from sklearn.svm import SVC
+lr_model = SVC(gamma='auto')
+lr_model.fit(X_train,y_train)      #svm apply kara gamma outo ghetl karn respnce variable ha possitivly skewed aahe
+
+#from sklearn.neighbors import KNeighborsClassifier
+#lr_model = KNeighborsClassifier(n_neighbors=5)
+#lr_model.fit(X_train, y_train)                        #kKNN apply kara
+
+from sklearn.naive_bayes import MultinomialNB
+lr_model = MultinomialNB()
+lr_model.fit(X_train, y_train)           #naive bised apply kara

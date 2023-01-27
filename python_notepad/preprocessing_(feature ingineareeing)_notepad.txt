@@ -1,0 +1,227 @@
+###### feature ingeanearing (data preprocessing)  #####
+
+## bar digram ##
+
+exp_value=[1400,600,300,410,250]
+exp_lables=["home rest","Food","Phone/Internet Bill","Car","Other Utilities"]
+plt.pie(exp_value,labels=exp_lables,shadow=True,autopct='%1.1f%%',explode=[0,0,0,0.2,0.6],counterclock=True,startangle=90,radius=1.5)
+plt.show()
+
+#Multiple bae##
+(plt.figure(figsize=(16,9))
+for i,var in enumerate(miss_vars):
+    plt.subplot(4,3,i+1)
+    plt.hist(cat_vars_copy[var],label="Impute")
+    plt.hist(cat_vars[var].dropna(),label="Original")
+    plt.legend()  )
+
+## line chart ##
+
+days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+temperature = [36,36.7,37,37.5,38,38.5,39,39.8,40,40.9,44,48,49.8,50.3,52] 
+temp_df = pd.DataFrame({'days':days,'temperature':temperature})
+sns.lineplot(x = 'days',y = 'temperature',data = temp_df)
+
+## multiple line chart in one graph ##
+
+plt.figure(figsize =(16,9) )
+sns.set(style= 'darkgrid')
+sns.lineplot(x='size',y='total_bill',data=tips_df,hue='day',style = 'day',palette='hot',markers=(['o','<','>','*']),legend='brief')
+plt.savefig('piechart.jpg')
+plt.show()
+
+plt.figure(figsize = (16,9)) 
+sns.set(style = 'darkgrid')
+sns.lineplot(x = "size",y = "total_bill",data = tips_df,hue = "sex",style="sex",palette="hot",dashes=False, markers= ["o","<"])
+plt.title('Line Plot',fontsize = 20)
+plt.xlabel('Size',fontsize = 15)
+plt.ylabel('Total Bill',fontsize = 15)
+plt.show()
+
+
+3 paryant aaloy thod far bgha
+
+## bar chart with curve ##
+
+sns.distplot(tips_df["size"])  #use categorical variable only
+plt.show()
+
+## histplot with curve ##
+
+sns.distplot(tips_df["total_bill"],bins = 50)  #use contineous data only bin=how many hist line plot
+plt.show()
+
+plt.figure(figsize = (16,9))
+sns.set()
+sns.distplot(tips_df['total_bill'],label="total_bill")
+plt.title('Histogram of total bill')
+plt.legend()
+plt.show()
+
+              ######  Preprocessing  #######
+
+  ## show all data ##
+
+  pd.set_option('display.max_columns',None)
+  pd.set_option('display.max_rows',None)
+  tips_df
+
+ tips_df.total_bill.sort_values()  ## sort perticuler column in ase or des order
+
+ plt.figure(figsize=(25,25))  ##check missing value in heatmap
+ sns.heatmap(df.isnull())
+
+null_var = df.isnull().sum()/df.shape[0] *100  ##check which persent of missing value are atually present
+null_var
+
+drop_columns  = null_var[null_var >17].keys() ##disply the col name when null values greter than 17 percent
+drop_columns
+
+#OR#
+(isnull_per=cat_vars.isnull().mean()*100
+miss_vars = isnull_per[isnull_per >0].keys()
+miss_vars)
+
+df2_drop_clm=df.drop(columns=drop_columns)  ## drop the column when null values greter than 17 percent
+
+df2_drop_clm.isnull().sum().sum()  ##check null value count
+
+df3_drop_rows = df2_drop_clm.dropna()
+
+df3_drop_rows.select_dtypes(include=['int64','float64']).columns  ## select only int and flot col name to aaply various graphs
+
+df3_drop_rows.select_dtypes(include=['object']).columns   # select only caracter col name  
+
+def cat_var_dist(var):
+    return pd.concat([df[var].value_counts()/df.shape[0] * 100, 
+          df3_drop_rows[var].value_counts()/df3_drop_rows.shape[0] * 100], axis=1,
+         keys=[var+'_org', var+'clean'])                                                        ## percentage of each categori orignal and clean data concatinating 
+
+
+ ## fill null vaues corrosponding to number of column by mean of that colms not seprate catagorical col itd also work.##
+
+
+df4_num_mean = df3_num.fillna(df3_num.mean())
+df4_num_mean
+
+df5_num_median = df4_num_mean.fillna(df4_num_mean.median())
+df5_num_median                                                    ##similarly replace median by corrosponding categorical colm 
+
+     ##Or###
+                (numeric variable)
+  from sklearn.model_selection import train_test_split
+x_trian,x_test,y_train,y_test = train_test_split(x,y,test_size = 0.3,random_state=100)   ##train test split
+
+num_vars=x_train.select_dtypes(include=["int64","float64"]).columns                      ##seprate int data on train part
+num_vars
+
+imputer_mean = SimpleImputer(strategy='mean')
+imputer_mean.fit(x_train[num_vars])
+imputer_mean.transform(x_train[num_vars])
+
+x_train[num_vars] = imputer_mean.transform(x_train[num_vars])
+x_test[num_vars] = imputer_mean.transform(x_test[num_vars])
+
+            (categorical variable)
+cat_vars=x_train.select_dtypes(include=["O"]).columns         ##seprate categorical data on train part      
+cat_vars
+
+
+
+      ####  concate value ####
+
+df_concat = pd.concat([df3_num[missing_num_var],df4_num_mean[missing_num_var],df5_num_median[missing_num_var]],axis = 1)
+df_concat
+imputer_mode = SimpleImputer(strategy='most_frequent')
+imputer_mode.fit(x_train[cat_vars])
+
+x_train[cat_vars] = imputer_mode.transform(x_train[cat_vars])
+x_test[cat_vars] = imputer_mode.transform(x_test[cat_vars])
+
+
+     ########### Dummy and One Hot incoder  #############
+
+   dummy_df = pd.get_dummies(tips_df)
+   dummy_df                              #dummy manje categori wise 0 aani 0 ase seprate column hotat
+
+  pd.get_dummies(tips_df, drop_first=True)    # yat drop_first mule 3 categori astil tr yek drop hote manje doni na 0 aani 0 asel manje 3rd present aahe
+
+
+   ## One-hot incoder##
+
+  from sklearn.preprocessing import OneHotEncoder
+  oh_enc = OneHotEncoder(sparse=False,)
+
+  oh_enc_arr = oh_enc.fit_transform(tips_df[['sex','smoker','day','time']])
+  oh_enc_arr                                                                    #he pn dummy sarkh work kart pn output array form madhe asto
+
+  dummy_df.keys()
+  oh_enc_df = pd.DataFrame(oh_enc_arr, columns=['sex_Female', 'sex_Male', 'smoker_No',
+       'smoker_Yes', 'day_Fri', 'day_Sat', 'day_Sun', 'day_Thur',
+       'time_Dinner', 'time_Lunch'])
+  oh_enc_df                                                                               #ya saglya code cha vapar karun array ch dataframe madhe conversion kel
+
+
+  ##Lable Indcoder ##
+
+ from sklearn.preprocessing import LabelEncoder
+ f1=LabelEncoder()
+
+ data['col_name']=f1.fit_transform(data['col_name'])  ## yamadhe dummy ny tayar hot fkt categorila name yete
+ data['col_name'].value_counts()                      #yamule ta categoriche kiti count aahe te samjte saglya catagory tha variable madhlya
+
+
+  ##order lable - (kontya categorila konta number daycha)  ###
+
+  order_Label = {"Ex":4,"Gd":3,"TA":2,"Fa":1}                              ##pratek categorila ky number assign karaycha to dic madhe lihla
+  df2["KitchenQual_org_enc"] = df2["KitchenQual"].map(order_Label)        ## ithe apply kel aaplaya nusar ky nav daych te
+
+
+   ######### standerdization and normalization #########
+
+ import pandas as pd 
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
+
+df2 = df[['survived',"pclass",'age','parch']]
+df2.head()                                       #use contineous variable
+
+X_train, X_test, y_train, y_test =train_test_split(X, y, test_size=0.2, random_state=51)
+print('Shape of X_train = ', X_train.shape)
+print('Shape of y_train = ', y_train.shape)
+print('Shape of X_test = ', X_test.shape)
+print('Shape of y_test = ', y_test.shape)
+
+sc = StandardScaler()
+sc.fit(X_train )
+X_train_sc = sc.transform(X_train)
+X_test_sc = sc.transform(X_test)         #standerdized
+
+X_train_sc =  pd.DataFrame(X_train_sc, columns = ["pclass",'age','parch'])
+X_test_sc =  pd.DataFrame(X_test_sc, columns = ["pclass",'age','parch'])    #create standirdized data frame
+
+#normalization-minmax##
+
+mmc = MinMaxScaler()
+mmc.fit(X_train)
+X_train_mmc = mmc.transform(X_train)
+X_test_mmc = mmc.transform(X_test)
+X_train_mmc =  pd.DataFrame(X_train_mmc, columns = ["pclass",'age','parch'])
+X_test_mmc =  pd.DataFrame(X_test_mmc, columns = ["pclass",'age','parch'])     #same as standerdization
+
+
+
+         ###### direct analysis and using following command  #######
+
+pip install pandas-profiling
+
+from pandas_profiling import ProfileReport
+from sklearn.datasets import load_diabetes       ## sklearn using load various datasets
+diab_data=load_diabetes()
+df=pd.DataFrame(data=diab_data.data,columns=diab_data.feature_names)
+
+profile = ProfileReport(df, title='Pandas Profiling Report', explorative=True)
+profile.to_notebook_iframe()                                                      #using all code write small report about data queckly
+  

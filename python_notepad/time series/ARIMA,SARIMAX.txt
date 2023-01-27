@@ -1,0 +1,112 @@
+   vidios: https://youtu.be/ugOvehrTRRw
+####### ARIMA(Auto Regressive Integrated moving average)#########
+ARIMA model he besically aapn sales according to time waigre asha data sathi use karto jar share market cha datasathi kontech model better work kart nahi jar work kart ast tr aapn miliniour zalo asto.
+yamadhe 3 part padtat auto regressive:manje aapn p parameter find karto yacha formula yt=b0+b1*x(t-1)+b2*x(t-2)+--------bn*x(t-n) regression aahe pn variable he time varti depend diva current observation past varti depend aahe pn ith ha prashn aahe ki yatle kiti paryant aapn past value consider karay cha jeki aapl answer changl yeil . yasathi aapn PACF(partial outo correlation)graph baghuyat ha graph partial correlation each varible kiva past data che baghto aani aaplala kiti p parameter chi value ghaychi te sangt.
+
+secound I=integrated yacha vapr aapl distribution he stetionary havy manje yacha mean aani variance ha pretekveli same havay time nusar change ny zala pahijel aaplya ARIMA kiva SARIMAX models madhe data always stetionary lagto manje sarl reshet data havay mahe 2010 la jasa change hot hota tasach 2022 la pn change zala pahijel.jr aapl distribution stetionary nasel tr aapn yacha madatine diffrence yeka yeka year ne shif karyn kadhun to data stetionary aahe ka te baghuyat. data stetionary aahe ka ny yashathi yek test aane tila dikey fuller test boltat yacha H0:p=1 means data is not stetionary H1: p<1 means data is stationary aahe as sangt data stetionary asnyasathi aapl p value lahan asli pahijel. kiti diffrence ne aapl distribution stationary hote yashathi d ha parameter aahe
+
+last moving average : yacha formula mage baghitla aani moving avrage kiti thevaycha yasathi aapn ACF(outo correlation graph) kadun baghto. aani yacha parameter q aahe
+
+import numpy as np
+import matplotlib.pyplot as plt
+import statsmodels.api as sms
+import pandas as pd
+
+%matplotlib inline
+
+df_airline=pd.read_csv('airline_passengers.csv')
+df_airline.head()                               #load the datasets
+
+df_airline.isnull().sum()  #check the null values
+
+df_airline.dropna(axis=0,inplace=True)  #drop null valus
+
+df_airline.info() #check information about the parameter
+
+df_airline['Month']=pd.to_datetime(df_airline['Month']) #convert moth column to datetime data type
+
+df_airline.set_index('Month',inplace=True)   #set month column as index
+
+from statsmodels.tsa.stattools import adfuller  #import dekey fuller test to check data are stationary or not
+
+def adf_test(series):
+    result=adfuller(series)
+    print('ADF Statistics: {}'.format(result[0]))
+    print('p- value: {}'.format(result[1]))
+    if result[1] <= 0.05:
+        print("strong evidence against the null hypothesis, reject the null hypothesis. Data has no unit root and is stationary")
+    else:
+        print("weak evidence against null hypothesis, time series has a unit root, indicating it is non-stationary ")    #create function to use that test
+
+adf_test(df_airline['Thousands of Passengers'])  #apply function of dekey fuller test in column
+
+## Use Techniques Differencing
+df_airline['Passengers First Difference']=df_airline['Thousands of Passengers']-df_airline['Thousands of Passengers'].shift(1)    #take 1st diffrence to check data is stationary or not but data is not stationary
+
+adf_test(df_airline['Passengers First Difference'].dropna())  #drop 1st na value
+
+## Use Techniques Differencing
+df_airline['Passengers Second Difference']=df_airline['Passengers First Difference']-df_airline['Passengers First Difference'].shift(1)  #use second diffrence so it shows the data is stationary
+
+### 12 months 
+## Use Techniques Differencing
+df_airline['Passengers 12 Difference']=df_airline['Thousands of Passengers']-df_airline['Thousands of Passengers'].shift(12)  #use 12 month diffrence bocouse seasonal data the variation made in every year so genarlly 12 month diffrence are mesority time give in the resurchers and that diffrence shows the our data is stationary
+
+from statsmodels.graphics.tsaplots import plot_acf,plot_pacf  #import library to ploting graphs of ACF and PACF
+
+acf=plot_acf(df_airline["Passengers Second Difference"].dropna())
+pacf=plot_pacf(df_airline["Passengers Second Difference"].dropna())    #check the graphs
+
+acf12 = plot_acf(df_airline["Passengers 12 Difference"].dropna())
+pacf12 = plot_pacf(df_airline["Passengers 12 Difference"].dropna())   #check graphs on 12 month diffrences
+
+train_data=df_airline[:train_dataset_end]
+test_data=df_airline[train_dataset_end+timedelta(days=1):test_dataset_end]      #train test split
+
+## create a ARIMA model
+from statsmodels.tsa.arima_model import ARIMA
+
+model_ARIMA=ARIMA(train_data['Thousands of Passengers'],order=(0,2,0))       #fit the model
+
+model_Arima_fit=model_ARIMA.fit()
+model_Arima_fit.summary()    #check all summary of the data
+
+pred_start_date=test_data.index[0]
+pred_end_date=test_data.index[-1]
+print(pred_start_date)
+print(pred_end_date)         #check the prediction data range
+
+pred=model_Arima_fit.predict(start=pred_start_date,end=pred_end_date)
+residuals=test_data['Thousands of Passengers']-pred   #caculate residual
+
+model_Arima_fit.resid.plot(kind='kde')  #plot kde graph
+
+test_data['Predicted_ARIMA']=pred  #predicted data men data la connect kela
+
+test_data[['Thousands of Passengers','Predicted_ARIMA']].plot() #plot kela origanal vs predicted plot
+
+
+########SARIMAX#################
+yach work pn same varchagt aahe pn aapla data ha seasnal asel tr ARIMA nit ny work kart tasathi he aaplala impliment karav lagt he better result det data nature is seasnol
+
+## create a SARIMA model
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+
+model_SARIMA=SARIMAX(train_data['Thousands of Passengers'],order=(3,0,5),seasonal_order=(0,1,0,12))
+
+model_SARIMA_fit=model_SARIMA.fit()
+
+model_SARIMA_fit.summary()
+
+test_data.tail()
+
+pred_Sarima=model_SARIMA_fit.predict(start=datetime(1956,6,6),end=datetime(1960,12,1))
+residuals=test_data['Thousands of Passengers']-pred_Sarima
+
+model_SARIMA_fit.resid.plot()
+
+model_SARIMA_fit.resid.plot(kind='kde')
+
+test_data['Predicted_SARIMA']=pred_Sarima
+
+test_data[['Thousands of Passengers','Predicted_SARIMA','Predicted_ARIMA']].plot()  #same as the upper model only model structre is change

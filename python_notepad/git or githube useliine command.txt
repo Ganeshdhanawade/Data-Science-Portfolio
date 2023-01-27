@@ -1,0 +1,78 @@
+  #Git- is the distributed version control system(DVCS) to create project and play with dataset in more than one student ##
+   whatever work is done by the git working directory and then it will show or placed in the online gitbut mode.
+
+git --version        #check the current version you can work on it
+
+git help           #using that command you can give the help of the all cammand on that can you use
+
+cd v:              #go to v volume in laptop
+
+dir               #check the how many files are present insite the that volume
+
+mkdir ganugit     #create ganugit file or folder in v drive   (/v/ganugit)
+
+cd ganugit        #check what any file avilable or not insite that folder abusoly no becouse resently create
+
+git stetus    # check what is the stetus (not a git reposetory) means here we not initialize the ganugit folder
+              # whatever folder you can apply on working directory or cloud on git first you can initilize first.
+
+git init      #inisilize my ganugit folder (/v/ganugit(master))
+
+git status
+
+git config --global user.name  " ganesh"
+git config --global user.email "dhanawadeganesh386@gmail.com"     #first use then you add user or email on that claud
+
+touch index.html       ##create index.html invirement on my ganugit file
+
+dir                   #so finaly it shows the index.html file prentent insite my ganugit (same as show table in sql)
+
+notepad index.html    #create and shows the notepad on my inde.html file and you can write whatever in your notepad
+                   #but this changes are note made in your git that changes are made in working directory so first you that changes are shown by our git
+
+git add .        #using that command you apdate your whaever write notepad changes shows by git
+
+git commit -m "write statment"   #using that you can tell your patner what exactly you are chenges using commit
+
+git log      #they will genrate a 40 caracter code to in future you acces the commit in that case that cammand are shows all commit with code to you eslily acces
+git log --oneline    #show only 7 character on our code
+git --log -3         #for many comment are present so using that command you check first 3 comment on it
+
+
+
+
+git remote   ## using that comment you can link or join with your gitbut online reposetory  (here is empty bocouse we note connect resently)
+
+git remote add origin  https://github.com/Ganeshdhanawade/exploratory-data-analysis.git      #we will connect my remote(gitbut) on here(git) as origin name
+
+git remote  #check origin are avilable or not
+
+git remote -v    #check the version of the above remote
+
+git push -u origin master  ##final over git file shows on our master or github online
+
+cat index.html  #to check the what is the insite on index.html (type kelel notepad varti te disnar)
+
+   #every time you can che the file,so you can add the changes on git and cammit on that chanes so that changes are shows by your github
+
+
+       ##########branching git - use for create our project dublicate file to whatever changes are made on that file orignal file is safe and after cheking master he will be apdate or replace orignal file to that apdates ############
+
+git brach     ##to check how many brach are avilable 
+
+git branch local   ###create dublicate of our master file as name local to use the many project members and allow to the change it
+
+git branch ganesha   ###name of that new file is ganesha
+
+git checkout ganesha
+switched to branch 'ganesha'       # all the orignal file will switch on that branch(/v/ganugit(ganesha)) aata yala connect zale master sodun honare chenge yat honar
+
+git checkout master     #ganesha varun aapn master varti aalo aata ith ky chenge kel tr the master file varti change dista janar
+
+git merge ganesha    ### master ne sagl baghetlaver barobar aahe ka te to aapli master file hi ganesha ya file ni change karel
+
+
+
+
+
+

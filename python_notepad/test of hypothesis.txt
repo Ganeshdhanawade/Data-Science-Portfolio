@@ -1,0 +1,130 @@
+  ###########One-sample T-test with Python#########
+The test will tell us whether means of the sample and the population are different
+
+ages=[10,20,35,50,28,40,55,18,16,55,30,25,43,18,30,28,14,24,16,17,32,35,26,27,65,18,43,23,21,20,19,70] #consider population data
+  
+import numpy as np
+ages_mean=np.mean(ages)
+print(ages_mean)       #population mean
+
+sample_size=10
+age_sample=np.random.choice(ages,sample_size)  #take sample of population
+
+from scipy.stats import ttest_1samp  #take one sample to check sample mean equal to population mean or not 
+
+ttest,p_value=ttest_1samp(age_sample,30) #30 ha population mean aahe
+
+print(p_value)
+
+if p_value < 0.05:    # alpha value is 0.05 or 5%
+    print(" we are rejecting null hypothesis")
+else:
+    print("we are accepting null hypothesis")  
+
+
+
+    ##########Two-sample T-test With Python#########3##
+The Independent Samples t Test or 2-sample t-test compares the means of two independent groups in order to determine whether there is statistical evidence that the associated population means are significantly different. The Independent Samples t Test is a parametric test. This test is also known as: Independent t Test
+
+classA_height=stats.poisson.rvs(loc=18,mu=30,size=60)
+classA_height.mean()
+ClassB_ages=stats.poisson.rvs(loc=18,mu=33,size=60)
+ClassB_ages.mean()
+     
+from scipy.stats import ttest_ind
+
+ttest,p_value=stats.ttest_ind(a=classA_height,b=ClassB_ages,equal_var=False)
+
+  ##########Paired T-test With Python########
+When you want to check how different samples from the same group are, you can go for a paired T-test
+     
+
+weight1=[25,30,28,35,28,34,26,29,30,26,28,32,31,30,45]
+weight2=weight1+stats.norm.rvs(scale=5,loc=-1.25,size=15)
+     
+weight_df=pd.DataFrame({"weight_10":np.array(weight1),
+                         "weight_20":np.array(weight2),
+                       "weight_change":np.array(weight2)-np.array(weight1)})    #check how to change weight after some months
+
+_,p_value=stats.ttest_rel(a=weight1,b=weight2)
+
+print(p_value)
+
+
+  #########3Anova Test(F-Test)######
+The t-test works well when dealing with two groups, but sometimes we want to compare more than two groups at the same time.
+
+For example, if we wanted to test whether petal_width age differs based on some categorical variable like species, we have to compare the means of each level or group the variable
+
+One Way F-test(Anova) :-
+It tell whether two or more groups are similar or not based on their mean similarity and f-score.
+
+Example : there are 3 different category of iris flowers and their petal width and need to check whether all 3 group are similar or not
+
+import seaborn as sns
+df1=sns.load_dataset('iris')  #load iris data
+
+df_anova = df1[['petal_width','species']] #select two featues
+
+grps = pd.unique(df_anova.species.values)  #shows unique category of secies variable
+
+d_data = {grp:df_anova['petal_width'][df_anova.species == grp] for grp in grps}
+      #category wise petal with variable dictionary madhe convert kela jeki aapn petel width of each category average wise same aahe ka ny te bghu
+
+F, p = stats.f_oneway(d_data['setosa'], d_data['versicolor'], d_data['virginica']) #one way anova ne check kel
+
+print(p)
+
+
+     ########## Chi-Square Test- #########
+The test is applied when you have two categorical variables from a single population. It is used to determine whether there is a significant association between the two variables.    
+     
+   import scipy.stats as stats
+
+import seaborn as sns
+import pandas as pd
+import numpy as np
+dataset=sns.load_dataset('tips')
+     
+dataset_table=pd.crosstab(dataset['sex'],dataset['smoker'])
+print(dataset_table)  #cross tabulation convert 2*2 table count no of male smoker etc
+
+dataset_table.values #show all value in array format
+
+#Observed Values
+Observed_Values = dataset_table.values 
+print("Observed Values :-\n",Observed_Values) #observed value
+
+val=stats.chi2_contingency(dataset_table)
+Expected_Values=val[3]  #expected valus
+
+no_of_rows=len(dataset_table.iloc[0:2,0])
+no_of_columns=len(dataset_table.iloc[0,0:2])
+ddof=(no_of_rows-1)*(no_of_columns-1)
+print("Degree of Freedom:-",ddof)  #find degrees of freedom
+alpha = 0.05
+     
+
+
+from scipy.stats import chi2
+chi_square=sum([(o-e)**2./e for o,e in zip(Observed_Values,Expected_Values)])
+chi_square_statistic=chi_square[0]+chi_square[1]  #calculate chi square statistics
+
+print("chi-square statistic:-",chi_square_statistic)
+     
+
+#p-value
+p_value=1-chi2.cdf(x=chi_square_statistic,df=ddof)
+print('p-value:',p_value)
+print('Significance level: ',alpha)
+print('Degree of Freedom: ',ddof)
+print('p-value:',p_value)   #find p-value
+
+
+if p_value<=alpha:
+    print("Reject H0,There is a relationship between 2 categorical variables")
+else:
+    print("Retain H0,There is no relationship between 2 categorical variables")
+     
+     
+       

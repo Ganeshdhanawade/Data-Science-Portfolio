@@ -1,0 +1,100 @@
+  ############## Time series Analysis ###############
+the time seris have an two part intrapolation and extrapolation . now the intraplolation means the data have the nature is depend on time meas we interest the sale on month but here we can create the model by using training testing of the data seme as the regression so it is not an forcasting problem it will prediction problem to predict the future value by previous information it simply means the obresvation are not dependant on each other this is called intrapolation problem.
+
+extrapolation problem is exact apposite to the intrapolation problem becouse each current obsrvations are depends on the privious data here we not use the simple regression we can use the forcasting problem.
+
+     ######## types of moving averages ###########
+now any time saris data have lots of the variations are present so the data will be not give an some pattern value in that case we not forcast value properly becouse variation under data is very large so in that case we use the foming average to convert large variation data into simple smoothing pattern so in that case we use the following averages are mostly used.
+1)simple moving average : 
+suppose that average we interset the 10 moving average so we take mean of 10 observation and write here next caluating MA eliminate 1st observation and add next obseration below and take mean like that.but that MA have drowbacks 1)we use mean of each obsevations 2)now shifting the obseration so we miss the provious data
+
+import pandas_datareader as pdr  #here command have to use verious inbult datasets
+import pandas as pd
+from datetime import datetime     #import datetime objects
+
+df_tesla=pdr.get_data_yahoo('TSLA')
+df_tesla                                  #load the inbult data
+
+df_tesla['open'].plot(figsize=(15,6))   #plot the simple one variable and check the nature of the graph
+
+df_tesla['open:10 days rolling']=df_tesla['open'].rolling(window=10,min_period=1)  #ithe 10 cha observation che mean gheun te plot honar 10 yearly or ky date day asel tanusar moving average zala aani min period 1 aslamule 1st value fkt nan dakhval tithun khali obseravtion distil
+
+df_tesla[['open','open:10 days rolling']].plot(xlim=['2020-1-1','2021-1-1'],figsize=(15,6)) #plot kel orignal vs aapl moving average
+
+2)cumulative moving average:
+ya average madhe cumulative sum cha average hot jato manje 1st 2 value sum divide 2, tasach 3rd observation la 1st 3 values cha sum divided 3 asha prakare mean kart jato aapn.
+
+df_tesla['open'].expanding().mean().plot(figsize=(15,6))  #yane aapn cumulative average kadun plot karu shakto
+
+3)exponential moving average(EMA):
+ha exponential moving average aahe formula=(close(manje aapl observation)-privious(EMA)*multiplier)+Privious(EMA) aani multiplier=2/(window+1) window manje tumi kiti observation ne moving average kadatay te.
+
+df_tesla['EMA_0.1']=df_tesla['open'].ewm(alpha=0.1,adjust=False).mean()  #ithe aapn EMA kiva EWMA doni pn calucate karto
+
+df_tesla[['open','EMA_0.1']].plot(xlim=['2020-1-1','2021-1-1'],figsize=(15,6)) 
+
+4)Exponentially weighed moving average(EWMA):
+formula EWMA(t)=a*x(t)+(1-a)*EWMA(t-1)  yat a manje wieght assign karto aani magcha pekasha current value la aapn jast wightege deto ha formula kiva ha average mejority vaprla jato.
+
+moving average(MA)=mu+Q1*epcilon(t-1)  Q1 is the hyperparameter and epcilon is error and it follos the standered normal distribution.
+
+   ############### EDA #################
+
+## Install Pandas Data Reader
+!pip install pandas-datareader
+
+import pandas_datareader as pdr
+import pandas as pd
+from datetime import datetime
+
+df_tesla=pdr.get_data_yahoo('TSLA')  ##read the dataset
+
+df_tesla['High'].plot(figsize=(12,4))
+
+df_tesla['High'].plot(xlim=['2020-01-01','2021-09-01'],ylim=[0,900],figsize=(12,4),ls='--',c='green')  #plot the graph
+
+df_tesla.index  #check the index
+
+figure,axis=plt.subplots()
+plt.tight_layout()
+## Preventing overlapping
+figure.autofmt_xdate()           #auto adust the x lable values and view properly
+axis.plot(index,share_open)
+
+df_tesla=df_tesla.reset_index()  #navin index apply honar juna index che conversion variable madhe honar
+
+df_tesla=df_tesla.set_index('Date',drop=True)   #navin index apply honar juna index drop honar
+
+
+## datetime
+from datetime import datetime
+
+datetime(2021,11,21)
+
+datetime.now()          #current date show honar output:datetime.datetime(2022, 2, 25, 19, 34, 3, 931965)
+
+date=datetime(2021,11,21)
+
+date.day
+date.weekday()
+date.year
+date.month
+
+ ############## Time Resampling ##############
+df_tesla.resample(rule='A').min()  #A=year end frequency manje year cha last manth and last day chi information show hote
+
+df_tesla.resample(rule='A').max()['Open'].plot()  #pratek last year cha last month cha last day cha max open chi value baghitli kiva tichi information milel
+
+##quaterly start frequency
+##https://towardsdatascience.com/resample-function-of-pandas-79b17ec82a78
+df_tesla.resample(rule='QS').max()['High'].plot()  #qurter cha start chi freqency disel
+
+##Business End Frequency
+##https://towardsdatascience.com/resample-function-of-pandas-79b17ec82a78
+df_tesla.resample(rule='BA').max()
+
+
+df_tesla.resample(rule='BQS').max()
+
+##plotting
+df_tesla['Open'].resample(rule='A').mean().plot(kind='bar') #bar plot karun value display kelya

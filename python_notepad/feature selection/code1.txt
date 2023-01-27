@@ -1,0 +1,90 @@
+ there are 3 catagoris to distribute the freature selection
+1)filter : I)correlation II)variance threshold III)chisquare IV)anova   V)information gain
+2)wrapper : I)RFE(recurrsive feature elimination)forword or backword  
+3)embeded : I)L1 and L2 II)use models
+
+
+
+###########Correlation and variance threshold#########
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+import pandas as pd
+
+from sklearn.datasets import load_boston
+data = load_boston()
+df = pd.DataFrame(data=data.data, columns=data.feature_names)
+df.head()
+
+orrMat = df.corr()
+
+plt.figure(figsize = (15,10))
+
+sns.heatmap(CorrMat, annot=True)   ##create an heatmap
+
+       ##### variance theshold ##########
+  droping constant feature whose are not variation so it can be delete
+
+from sklearn.feature_selection import VarianceThreshold #Understand from sklearn documentation
+df["MyNewCol"] = 100   #create new variable to fill all value in 100
+
+df.head()
+
+VarThresh = VarianceThreshold(threshold=0)
+VarThresh.fit(df)
+VarThresh.get_support()   #check threshold 0 meance their is no variace in your model so that variable is not important so variation arises in your model so your moel feature is important
+
+
+    ###########chi-square anova f-value############
+
+#iris data
+from sklearn.datasets import load_iris
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import SelectPercentile
+from sklearn.feature_selection import chi2
+from sklearn.feature_selection import f_classif
+import numpy as np
+
+
+
+iris = load_iris()
+
+
+X = iris.data
+y = iris.target
+
+
+X = X.astype(int)
+
+
+chi2_selector = SelectPercentile(chi2)  #chi square use categorical variable
+#or chi_selector = SelectKBestchi2,k=2) #means sagla feature madhle 2 best feature dinar
+kBest = chi2_selector.fit_transform(X, y)
+
+
+chi2_scores = pd.DataFrame(list(zip(iris.feature_names, chi2_selector.scores_)), columns=['feature', 'score'])
+chi2_scores
+
+
+
+
+# In[38]:
+
+
+print('number of original features:', X.shape[1])
+print('number of reduced features:', kBest.shape[1])
+
+np.asarray(iris.feature_names)[chi2_selector.get_support()]
+
+
+      ############# Information Gain #################
+
+from sklearn.feature_selection import mutual_info_classif
+Data = pd.read_csv("C:\\Users\\amanr\\OneDrive\\Desktop\\insurance.csv")
+Data.head()
+
+features = Data[['age', 'bmi','charges']] #continiuos
+target = Data[['region']] #categorical
+feature_scores = mutual_info_classif(features,target, random_state=0)
+feature_scores          #check information gain

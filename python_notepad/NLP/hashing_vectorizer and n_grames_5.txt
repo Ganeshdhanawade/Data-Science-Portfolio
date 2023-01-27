@@ -1,0 +1,42 @@
+       ######### Hashing vectorizer #####
+aapn bag of word madhe baghitl ki konta shabd kiti vela reapeat zala tachanusar aapn count gheto aani count vectorizer ne answer kadto. tasach aapn tfidf vectorizer madhe baghitl. pn ithe aapn saglya important word cha vichar karto tamule matrix ha motha hoto aani storage pn jast ghet kiva feature jast aslamule complexity vadhate manun aapn hashishing vectorizer vaparto.jr vocabilary aapli jast asel teva aapn he vaprato.
+agorithm run hoila pn jast vel ghet count vectorizer.
+he interger madhe convert kart aaplya vocabalary aani arbitary lenght aste je ki kiti feature ghayche he aapn yala sangaycha.
+
+from sklearn.feature_extraction.text import HashingVectorizer  #ha vectorizer aapn vaparto
+# list of text documents
+text = ["The quick brown fox jumped over the lazy dog."]
+
+vectorizer = HashingVectorizer(n_features=20)  #we can mannulay tel the vectorizer for giving the feature size is 20, in your practice you can changes that values in your problem accuracy.
+vector = vectorizer.transform(text)
+
+print(vector.shape)  #check the spape of above vector
+
+print(vector.toarray())  #see the value of array formate
+
+
+        ######### N-grams in NLP  ############
+he aapla word la n-grams madhe convet kart yacha vapar aapn yekhad task perform karnyasathi karto manhe aapla sentence "my name is ganesh"
+ase asel aani aapn n-gram madhe N=2 dil tr he aapla stetment la don don cha word madhe grouping kart aani yek yek word sodat jat conversion:"my name","name is","is ganesh"
+ashaprakare te conversion kart tasach nchi value 3 dili tr te tanusar conversion kart janar.N=2 ghetl tr 3 sentence tayar zale he sentence kiti honar he kase kalnar tr sentence(Ngrams)= total word in sentence - (N-1)=4-(2-1)=3 grams tayar zale.
+use:outo complition of sentece madhe yacha use hoto, email la suggesion yetat outo tat yacha vapar hoto, outo cheking grammer in langulage use hoto. ashaprakare to sentence la breake karun tache kont important sentence hoil he sangt.
+
+#Natural Language Processing, or NLP for short, n-grams are used for a variety of things. Some examples include auto 
+#completion of sentences (such as the one we see in Gmail these days), auto spell check (yes, we can do that as well), and to a 
+#certain extent, we can check for grammar in a given sentence.
+
+def N_Grams(text,n):     #n gram ch function tayar kel
+    # split sentences into tokens
+    tokens=re.split("\\s+",text)     #statment la token madhe convert karel
+    ngrams=[]                         #aapl navin statment yat store karuyat
+    # collect the n-grams
+    for i in range(len(tokens)-n+1):          #kiti statment havet varcha formulanusar
+     temp=[tokens[j] for j in range(i,i+n)]   #tokan la n nusar word che group kart add kele
+     ngrams.append(" ".join(temp))    #token join kele
+    return ngrams                     #final n nusar tayar zalele statement return kel
+
+text1="the quick brown fox jumps the lazy dog";
+N_Grams(text1,1)
+N_Grams(text1,2)
+N_Grams(text1,3)  #varcha statemnt la vegvegla n-grams madhe convert kel
+

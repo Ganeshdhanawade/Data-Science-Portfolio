@@ -1,0 +1,214 @@
+      ############  Named-entity recognition (NER)  ############
+(also known as entity identification, entity chunking and entity extraction) is a subtask of information extraction that seeks to locate and classify named entities mentioned in unstructured text into pre-defined categories such as person names, organizations, locations, medical codes
+
+spaCy has an 'ner' pipeline component that identifies token spans fitting a predetermined set of named entities. These are available as the ents property of a Doc object.
+
+  (NER yacha meaning aapn yacha vapar jar aapla sentence madhe name,person name,organisation,location kiva medical code asi name aale tr he ti nav gess karun aaplala sangt ki, suppose next month aapla sentence madhe aal tr te tachi information madhe date aahe as kiva date shi related information aaplala desplay kart)
+
+# Perform standard imports
+import spacy
+nlp = spacy.load('en_core_web_sm')
+
+# Write a function to display basic entity info:
+def show_ents(doc):
+    if doc.ents:
+        for ent in doc.ents:
+            print(ent.text+' - '+ent.label_+' - '+str(spacy.explain(ent.label_)))
+    else:
+        print('No named entities found.')  #ents ya function cha vaper karun aapn sagli information baghto NER chi he yek function define kelay aata tat ent che sagli information desplay keliye.
+
+doc = nlp(u'Hi, everyone in Fahad Hussain CS')
+
+show_ents(doc)      #yeka string var varcha define kelele function apply karyn bghitl
+
+
+   #####Entity annotations###
+Doc.ents are token spans with their own set of annotations.
+
+`ent.text`      	The original entity text
+`ent.label`      	The entity type's hash value
+`ent.label_`     	The entity type's string description
+`ent.start`     	The token span's *start* index position in the Doc
+`ent.end`       	The token span's *stop* index position in the Doc
+`ent.start_char`	The entity text's *start* index position in the Doc
+`ent.end_char`   	The entity text's *stop* index position in the Doc
+
+
+
+   ####NER Tags - he tag org asel tr tache description yeil sangl ##
+Tags are accessible through the .label_ property of an entity.
+
+TYPE              	DESCRIPTION                                     	 EXAMPLE
+`PERSON`	People, including fictional.                            	*Fred Flintstone*
+`NORP`   	Nationalities or religious or political groups.          	*The Republican Party*
+`FAC`   	Buildings, airports, highways, bridges, etc.            	*Logan International Airport, The Golden Gate*
+`ORG`   	Companies, agencies, institutions, etc.                  	*Microsoft, FBI, MIT*
+`GPE   `	Countries, cities, states.                              	*France, UAR, Chicago, Idaho*
+`LOC`   	Non-GPE locations, mountain ranges, bodies of water.    	*Europe, Nile River, Midwest*
+`PRODUCT`    	Objects, vehicles, foods, etc. (Not services.)          	*Formula 1*
+`EVENT`  	Named hurricanes, battles, wars, sports events, etc.     	*Olympic Games*
+`WORK_OF_ART`	Titles of books, songs, etc.                             	*The Mona Lisa*
+`LAW`   	Named documents made into laws.                         	*Roe v. Wade*
+`LANGUAGE`	Any named language.                                     	*English*
+`DATE`  	Absolute or relative dates or periods.                  	*20 July 1969*
+`TIME`  	Times smaller than a day.                               	*Four hours*
+`PERCENT`	Percentage, including "%".                              	*Eighty percent*
+`MONEY` 	Monetary values, including unit.                        	*Twenty Cents*
+`QUANTITY`	Measurements, as of weight or distance.                   	*Several kilometers, 55kg*
+`ORDINAL`	"first", "second", etc.                                    	*9th, Ninth*
+`CARDINAL`	Numerals that do not fall under another type.           	*2, Two, Fifty-two*
+
+   ####### Adding a Named Entity to a Span ######
+Normally we would have spaCy build a library of named entities by training it on several samples of text.
+In this case, we only want to add one value:
+
+(jar yekadhi value suppose ganesh he maz nav aahe pn pc la kas samjnar he person name aahe karan te english language madhe ny yet mg yasathi aaplala te person ch nav aahe as add karav lagt aapla name intity madhe aani te aapn span function through karto)
+
+doc = nlp(u'Ganesh to build a U.K. factory for $6 million')
+
+show_ents(doc)    #varchi string madhle name intity show keli pn tane name he ny show kel
+
+from spacy.tokens import Span    #yacha through aapl nav intity madhe add karu
+
+# Get the hash value of the ORG entity label
+ORG = doc.vocab.strings[u'PERSON']         #mala person ya category madhe nav add karychy 
+
+# Create a Span for the new entity
+new_ent = Span(doc, 0, 1, label=ORG)  #mi span through doc stetment madhl 0 to 1 possition madhl nav person madhe store kel
+
+# Add the entity to the existing Doc object
+doc.ents = list(doc.ents) + [new_ent]1  #te new entity nav he aaply doc.ints madhe add kel
+show_ents(doc)  #aata puna string show kel jenekarun aata nav he pn show hoil 
+
+ ##### Adding Named Entities to All Matching Spans ###
+What if we want to tag all occurrences of "WORDS"? WE NEED TO use the PhraseMatcher to identify a series of spans in the Doc:
+
+(jar yeka peksha jast nav astil manje ganesh dhanawade kiva ganesh-dhanawade as asl tri te doni sathi match kel pahije yasathi khalcha code aahe )
+
+doc = nlp(u'Our company plans to introduce a new vacuum cleaner. '
+          u'If successful, the vacuum cleaner will be our first product.')
+
+show_ents(doc)
+
+# Import PhraseMatcher and create a matcher object:
+from spacy.matcher import PhraseMatcher
+matcher = PhraseMatcher(nlp.vocab)        #phade matcher cha paver karun aadhi aapn aapala kashala ky denote karaychy ti nav list madhe dili
+
+# Create the desired phrase patterns:
+phrase_list = ['vacuum cleaner', 'vacuum-cleaner']
+phrase_patterns = [nlp(text) for text in phrase_list]
+# Apply the patterns to our matcher object:
+matcher.add('newproduct', None, *phrase_patterns)
+
+# Apply the matcher to our Doc object:
+matches = matcher(doc)
+
+# See what matches occur:
+matches
+
+# Here we create Spans from each match, and create named entities from them:
+from spacy.tokens import Span
+
+PROD = doc.vocab.strings[u'PRODUCT']
+
+new_ents = [Span(doc, match[1],match[2],label=PROD) for match in matches]
+
+doc.ents = list(doc.ents) + new_ents
+show_ents(doc)
+
+
+
+     ################### sentence segmentation ###########
+Sentence segmentation is the process of determining the longer processing units consisting of one or more words. This task involves identifying sentence boundaries between words in different sentences.
+
+In spaCy Basics we saw briefly how Doc objects are divided into sentences. In this section we'll learn how sentence segmentation works, and how to set our own segmentation rules.
+
+( yacha vapar karun aapn aapla paraghaph madhle line kanashe seprate karaychi he baghu genrally aapn full stop(.) nanter navin line chalue zali as consider karto aani he ithe pn tanusar aapla paragraph diffrent sentence madhe convert kart jat.pn aaplala colun nunter aaple stetment vegl karaych asel kiva aaplya custom value new line(\n) waigare tr ith aapn karu shakto)
+
+# Perform standard imports
+import spacy
+nlp = spacy.load('en_core_web_sm')
+
+# From Spacy Basics:
+doc = nlp(u'This is the first sentence. This is another sentence. This is the last sentence.')
+
+for sent in doc.sents:
+    print(sent)              #ithe aapn sents cha vapar karun aaple paraghaph break karu shakto genrally full stop nantr aapla paraghaph break hoto
+
+
+   ####Doc.sents is a generator  ###
+It is important to note that doc.sents is a generator. That is, a Doc is not segmented until doc.sents is called. This means that, where you could print the second Doc token with print(doc[1]), you can't call the "second Doc sentence" with print(doc.sents[1]):
+
+print(doc[1])  #doc stetment madhlya 1st possition la is aahe he index ne sangu shakto
+
+print(doc.sents[1])  #pn yane aapn aaplya sentence madhlya word chi possion ny dakhu shakt error through kart yashathi khalch baghu.
+
+doc_sents = [sent for sent in doc.sents]
+doc_sents   #varch stetment aadhi list madhe save kel
+
+print(doc_sents[1])   #aata error ny through honar
+
+# Parsing the segmentation start tokens happens during the nlp pipeline
+doc2 = nlp(u'This is a sentence. This is a sentence. This is a sentence.')
+
+for token in doc2:
+    print(token.is_sent_start, ' '+token.text)    ##ithe one by one token print hoil aani aani start new line cha word samor true o.w none dakhvl.
+
+doc3 = nlp(u'"Management is doing things right; leadership is doing the right things." -Peter Drucker')
+
+for sent in doc3.sents:
+    print(sent)            #barcha sentence madhe inverted madhe aslele line hi yek saprate karel bakiche vegle karel pn aaplala inverted cha aat colun pasun pudhche word saperate karaycha aahe tasathi
+
+# ADD A NEW RULE TO THE PIPELINE
+def set_custom_boundaries(doc):
+    for token in doc[:-1]:
+        if token.text == ';':
+            doc[token.i+1].is_sent_start = True
+    return doc
+
+nlp.add_pipe(set_custom_boundaries, before='parser')
+
+nlp.pipe_names    #ya code ne aapn aapl costome ne tya colun pasun saperate kel aani add_pipe madhe te add kel
+
+# Re-run the Doc object creation:
+doc4 = nlp(u'"Management is doing things right; leadership is doing the right things." -Peter Drucker')
+
+for sent in doc4.sents:
+    print(sent)           #aata ith baghitl tr aaplala sentence velgl zalele disel
+
+## new line ne kas seprate karyach ###
+
+nlp = spacy.load('en_core_web_sm')  # reset to the original
+
+mystring = u"This is a sentence. This is another.\n\nThis is a \nthird sentence."
+
+# SPACY DEFAULT BEHAVIOR:
+doc = nlp(mystring)
+
+for sent in doc.sents:
+    print([token.text for token in sent])  #varcha stetment madhe /n jith aahe ithun pudhe new line kiva sentence velgle kele pahije yasathi kalcha code aahe
+
+
+# CHANGING THE RULES
+from spacy.pipeline import SentenceSegmenter
+
+def split_on_newlines(doc):
+    start = 0
+    seen_newline = False
+    for word in doc:
+        if seen_newline:
+            yield doc[start:word.i]
+            start = word.i
+            seen_newline = False
+        elif word.text.startswith('\n'): # handles multiple occurrences
+            seen_newline = True
+    yield doc[start:]      # handles the last group of tokens
+
+
+sbd = SentenceSegmenter(nlp.vocab, strategy=split_on_newlines)
+nlp.add_pipe(sbd)
+
+
+doc = nlp(mystring)
+for sent in doc.sents:
+    print([token.text for token in sent])

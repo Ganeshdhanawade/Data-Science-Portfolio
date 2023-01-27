@@ -1,0 +1,94 @@
+    ########## Analysing the and create small report in exploratory analysis  ########
+
+   #### 1. sweetviz  ###
+
+import pandas as pd
+
+### Dataset link: https://www.kaggle.com/c/house-prices-advanced-regression-techniques
+import sweetviz
+train = pd.read_csv("train.csv")
+test = pd.read_csv("test.csv")
+
+my_report = sweetviz.analyze([train, "Train"],target_feat='SalePrice')    #Analyzing a single dataframe (and its optional target feature)
+
+y_report.show_html('Report.html')  ##show analysis in html formate
+
+my_report1 = sweetviz.compare([train, "Train"], [test, "Test"], "SalePrice")  #Comparing two dataframes (e.g. Test vs Training sets)
+my_report1.show_html('Report.html')
+
+
+   #### 2. pandas profiling report ####
+
+import numpy as np
+import pandas as pd
+from pandas_profiling import ProfileReport
+
+from sklearn.datasets import load_diabetes
+diab_data=load_diabetes()
+df=pd.DataFrame(data=diab_data.data,columns=diab_data.feature_names)
+
+profile = ProfileReport(df, title='Pandas Profiling Report', explorative=True) #create the report of small analysis
+
+profile.to_file("output1.html")  #store in html formate
+
+
+    #### 3. pandas visual analysis  ####
+
+import seaborn as sns
+print(sns.get_dataset_names())  #check inbult dataset ist in sns libraray
+
+df=sns.load_dataset('titanic')
+
+from pandas_visual_analysis import VisualAnalysis
+VisualAnalysis(df)  #show tha all visual analysis in the whole dataset with all the parameters
+
+
+    ######### 4. dtale ########
+this is good for EDA just click it will give the analysis and whatever analysis done it also genrate python code
+
+import seaborn as sns
+print(sns.get_dataset_names())
+df=sns.load_dataset('planets')  #get dataset
+df.head()
+
+import dtale
+dtale.show(df) #that comand you analyse
+
+
+    ######## below library work with pandas alternatives ######
+
+   ##1. Vaex- Reading And Processing Huge Datasets in seconds###
+
+What is Vaex?
+Vaex is a high performance Python library for lazy Out-of-Core DataFrames (similar to Pandas), to visualize and explore big tabular datasets. It calculates statistics such as mean, sum, count, standard deviation etc, on an N-dimensional grid for more than a billion (10^9) samples/rows per second. Visualization is done using histograms, density plots and 3d volume rendering, allowing interactive exploration of big data. Vaex uses memory mapping, zero memory copy policy and lazy computations for best performance (no memory wasted).
+
+import vaex
+import pandas as pd
+import numpy as np
+n_rows = 1000000
+n_cols = 500
+df = pd.DataFrame(np.random.randint(0, 100, size=(n_rows, n_cols)), columns=['col%d' % i for i in range(n_cols)])
+df.head()
+
+file_path = 'final_data.csv'
+df.to_csv(file_path, index=False)  #code for csv file
+
+vaex_df = vaex.from_csv(file_path, convert=True, chunk_size=5_000_000)    #code for hdf5 files
+
+vaex_df = vaex.open('final_data.csv.hdf5') #reasd hdf5 file
+
+%%time
+vaex_df['multiplication_col13']=vaex_df.col1*vaex_df.col3
+
+vaex_df['multiplication_col13']
+
+vaex_df[vaex_df.col2>70]
+
+%%time
+vaex_df_group=vaex_df.groupby(vaex_df.col1,agg=vaex.agg.mean(vaex_df.col4))
+vaex_df_group
+
+%%time
+vaex_df.groupby(vaex_df.col1,agg='count')
+
+above is some oprations of that its run time is very fast as compare to pandas library
