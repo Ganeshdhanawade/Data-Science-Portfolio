@@ -1,0 +1,122 @@
+   ####### deep learning introduction #############
+artificial intelegence=mimig human behaviour is artificial learning
+Machine learning=this is work on human neouron whaterv our head work theis is same
+feature extraction done in machine lerning that own but machine learning feature extrantion creation by human.
+there are three part of deep learning :
+1)supervised learning : a) ANN(artificial nural network) b)CNN(convolutional nural network) c) RNN(recurrent neural network)
+2)unsupervised learning : a) Boltzmann machine vs deep BM b)self organizing maps c)Autoencoder
+3)rinforecement learning : a) GAN(generative Adversarial Network) b) Deep Q learning c)pre train model(CNN Achitecture)
+
+        ##### ANN(artificial nural network)#####
+ANN have two tyes regression and classification.In our head nuron working theree parts dendrites,axon and Neuron now dendrites is recive the signal in other nurons and Axon are pass the singnals in one nurons to other neorons. many neorons are work well in human head.
+usingone newron i have to give the input and output is called perceptron.
+In ANN input variable is nothing but input variable that variable i have give the information on many neorons and assigning the weights in neorons and after assigning wieght we can apply activation function and give the output.
+
+   ####Activation fuction ########
+activation function basically use for our neouron activated or not for given information if the given data are importan so our activation function is activated and give the result on output in deep learning non-linear activation function is mostly use the formula for activation function is y= sum(weight*input)+bias.
+
+following are the the mostly used activation function types:
+ 
+1)Threshold function:
+this function is streight forword function a(x)=1 ifx>=0 o.w. 0 if x<=0
+there means the value of our input variable is 0 so our note is deactivated and value is greter than 0 so our node is activated.
+
+2)sigmoid fuction:
+that function is probability based function and mesorly used in binary classifiction are its rage between 0 to 1. now it shows the good result without romoving the outlier now our data is not important so this model create less probability according to the information in these way work. and i will diside thesold in 0.5 means the probability is greter our threshold it means classifiy 1 and less than so classify 0 formula is a(x)-1/(1+e^-x).mesority this function is used in output layer of binary classification.
+
+3)Rectifier(Relu) function:
+this is non-linear function and mostly used in hidden lear becouse in bacpropogation it will easity adjust weights and activate the deactiveted nodes.formula is a(x)=max(x,0) means the value of x is possitive so it move forword according to their weight probability if value of x=0 so it will not work.
+
+4))leaky Relu function:
+this fuction prcedure same as relu but value of x is less than zero so this fuction not to direct deactivate the leay this is give an some 0.000001 value adjust this value not fixed but example.
+
+
+5)Hyperbolic Tangent(tanh) function:
+this is same as the sigmoid s shape but the rang of that function is 1 to -1 so in that values esily handdle the negative values. formula a(x)=(1-e^-2x)/(1+e^-2x)
+
+5)softmax function:
+this fuction is basically used the output is an multicass means multicategorical data we can use the softmax function. formula=e^x/sum(e^x).
+
+    ############## wrking of nural netework ###########
+here menly theree layers are used 1st input layer 2hidden layer and 3rd output layer here we use whaever you used input and multiple hiddent layer and connect that layer in output.
+
+    ##########forwerd and backword propogation ##############
+forword propogation = now if the our model whatever predict the value these value is not same as the actual value in that case our model calculate the resudual or diffrece of that two vaues this diffrece is called as loss function. but i have current the prediction in that case weights are apdated that weight are apdated in starting to inding  these procedure is called forword prapogation. this check statrting to inding what value or weght are wrong and ajust it.
+
+backwork propogation = this propogation procedure is same as forword propogation  but weight are adusted in backwordly not ajust weighe adjust starting but it check the backword to which value adusted this called bakword propogation. the formula for caculation of loss function is C=1/2sum(y_pred-y_actual).
+1 forword + 1 backword =1 epoch. these epoch means i adust wight multiple time if diffrece of actural are preducted are zero. many epoch so model learn more and more very well.
+
+   ###########Bias###########
+Bies is just like an intercept added in the liner equration.this is additional prameter in nural network used to adjust weight in nuron it allow to shift activation function ither write or left.
+output=sum(weight*input)+bias
+this costant value is add the weight to deside what is performance of activation function or chenge the result of activation function.
+
+
+  ############# Gradian Descent(BGD) ###############
+now the minimizing the loss function, gradient distent is most usefull role that method is update the wieghts of parameter untill the global munimun are obtained. global minimum means the value of loss function is not zero anyway but what is most minium value is obtain by the gradien decent. check by taking graph of cost function vs weight to obtain the global minima.
+ formula x_new=x_old-n(dy/dx) n is lerning rate now the what amout value of x is change this changes are diside by the learning rate. so lerning rate play the important role of obtaing global minimum. if the lerning rate is high in that case cost function is high so in very step you minimize the learning rate so you can esily gose for the global minimum.
+
+Here there are three tyes of gradien disent are mostly used:
+1)stocastic gradien disent:
+these gradien disent data will randomly selected on by one row or obervtion and check the loss function saperately and adjust weight each obervation saperately and obtain minimum loss but here seperatly work so here some complication of which is most global mimima are avilable in the data. if i apply the gradien method in at time most of the data so it gives and load becouse at time model learn most observation. so large dataset this is good work.
+
+2)mini batch gradien disent:
+here i have large dataset and we aapply stocastic gradient disent so here gives an more time to indivisuall check the observation. so we can give the some rows or sum oberation combine this is called minibatch. mstly use hot aani efficent result det.
+
+3)batch gradian disent:
+ithe aapn sagla data deto jachamule jast load yota jar data jast asel tr kami data asel tr he changl work hoil.
+  
+
+   ################### how to adust learning rate #############
+now the othe name of acurally use in algorithe name of gradient disent is optimizer so there are many typs of optimezer are used in the algorithms they can be adust weight diffrent ways and give the value of global minimum.
+gradient descent with movmentum = each gradien distent gows for technique movementum computes on exponentially weighted average of your gradients that movmentom adjust wieght is very highly as compare to standerd gradien disent.means firstly i give an high lerning rate and it redust of each next step and ative global minima.
+here backword propogation change their wighes and bies is below formula
+w=w-lerning rate*dw
+b=b-lerning rate*db  #b=bias w=weight
+varch ingenral vaperto pn in mumentum aapn dw aani db cha jagi exponetial weigh add karto
+V_dw=beta*V_dw+(1-beta)*dw
+V_db=beta*V_db+(1-beta)*db   beta= hperparameter aahe range 0 to 1 aahe 0.9 gerally good result
+so the simplify formula is 
+w=w-lerning rate*V_dw
+b=b-lerning rate*V_db
+
+  ############ most commanly used optimizer ###########
+
+1)adagrad optimizer(adaptive gradient optimizer):
+aapn ya aadhi yeka learning rate varr kam karat hota tr aata tumi pratek node sathi tumi vegvegl lerning rate dya tachamule ouptut changl aad fast hot. kahi node upyogache naslamule tana lerning rate chi garj naste ashaveli adagrad cha paver kela ki to jana adjust karaychi garj aahe tanach adust karto. 
+eg dence matrix = all value are nonzero
+   parce matrix = some matrix value are zero
+tr parse matrix ja thikani te changl result deil
+formula w=w-n*dl/dx   n=n/ssqrt(alpha+epcilon)  epcilon= small value
+alpha=sum(all iteration loss value)=sum(dl/dx)^2
+alpha jr jast vadhal tevda lerning rate khoop kami honar aaplala jar lerning rate vadvaycha hota tr to nay vadla asha veli he changl work ny kart.
+
+2) RMSProp(residual mean squrare)prop optimizer:
+same varchagat aahe pn ith kahi velela aapli alpha chi value lay vadhli tr problem yet hota tachamule aapn alphacha  jagi cumulative sum of squrared gradient in adatgrad gheto.
+
+formula w=w-n*dl/dx   n=alpha/ssqrt(s+epcilon)  epcilon= small value
+alpha=sum(all iteration loss value)=sum(dl/dx)^2
+s=beta*s + (1-beta)*(dl/dx)^2
+yachamule value aapla lerning rate chi vadhnar nay
+
+3)adadelta optimizer:
+created in 2012 he pn adadelta cha part aahe yat
+delta=current weight - new updated weight
+The difference between adadelta and rmsprod is that adadelta removes the use of the learning rate parameter completlyby repacint it with D, the exponential moing average of squared deltas.
+
+ n=sqrt(D + epcilon)/ssqrt(s+epcilon) , D=beta*D + (1-beta)*(delta(w_t))^2
+delta(w_t)=w_t - w_t-1
+
+4)Adam:
+this is the combination of momentum and RMSprop.mosly used by that method in optimization techniques.
+
+          ###########Bias-tradeoff#########
+
+we can run the model multiple time means yekach model aapn multiple time run kel tr pratek veli accuracy kami jiva jast hotiye karan te puna navin vegvegla padhatin train hot tamule tach variation la bias and variance-tredoff boltat. he overcome karnyasathi k-fold cross validation waigare bghu
+aani under kiva over fitting mule ithe problem yetat
+##irreducible error##
+data collect karata veli kiva kelavr ji error yete ti aapn reduse kart ny tilach irredusible error mantl jat
+
+
+
+   

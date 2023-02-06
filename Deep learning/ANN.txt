@@ -1,0 +1,417 @@
+7         ############## ANN(artificial nural network)###########
+that network are input,hidden and output layers are present now your problem hafe 5 independant variable so ANN also have 5 input layer and many hidden layer are present in your problem one hidden layer have many nodes are present and only or more output are present. each notes are connected with each input and each note connected with every other nodes.
+This is same as the supervised linerning but here output not currect classifiy then forword and backword propogation you can get the correct output.
+steps:
+1)initially value of weights are close to zero niglisible assing kara but not zero.
+2)jo problem aahe jevde independant tevde input note
+3)forword propogation houn nuron activate hotil
+4)loss function kadayche
+5)back propogation karun weight adjust karayche
+6)updata these procedure untill optimum solution is obtain or is called 1 st epoch
+
+  #####brest cancer dataset (binary classification)######
+
+Original file is located at
+    https://colab.research.google.com/drive/1cfA0Emg-dQ7V39jZcfnMIfQAQI05gsQs
+"""
+
+from google.colab import files
+
+uploaded = files.upload()
+
+for fn in uploaded.keys():
+  print('User uploaded file "{name}" with length {length} bytes'.format(
+      name=fn, length=len(uploaded[fn])))             #upload file using your machine
+
+import pandas as pd
+import io
+data=pd.read_csv(io.StringIO(uploaded['data.csv'].decode('utf-8')))
+data.head()                               #mo of rows aapn exicute karun baghitl data currect aalay ka ny te
+
+import seaborn as sns
+ax = sns.countplot(data['diagnosis'], label= 'Count')
+B,M = data['diagnosis'].value_counts()
+print('Benign', B)
+print('Malignanat', M)         #tirget variable chi usualize karun quantity bghitli
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+# Importing data
+del data['Unnamed: 32']  #noko aslele atribute column delete kela
+
+X = data.iloc[:, 2:].values
+y = data.iloc[:, 1].values
+
+# Encoding categorical data
+from sklearn.preprocessing import LabelEncoder
+labelencoder_X_1 = LabelEncoder()
+y = labelencoder_X_1.fit_transform(y)
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+#Feature Scaling
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)             #standerdized the data
+
+X_train
+
+X_test
+
+!pip install keras
+
+import keras
+from keras.models import Sequential  #work is done by sequential
+from keras.layers import Dense
+
+from keras.layers import Dropout
+
+#adding the input and first hidden layer
+classifier = Sequential()
+classifier.add(Dense(output_dim=16, init='uniform', activation='relu',input_dim=30))#first layer ass keli input 30 independat variable. output_dim(hidden layer quantity)=input(30)+output(1)/2=16 layer oputput la ghetlya tripn aapn parameter tunning karung baghto kon kiti result detay te. inti=weight chi value uniformly adjust kart.
+classifier.add(Dropout(p=1.0))
+
+#adding the second hidden layer
+classifier.add(Dense(output_dim=16, init='uniform', activation='relu'))#ithe aadicha input hidden layer yevdech node asnar
+classifier.add(Dropout(p=1.0))
+
+#adding the output layer
+classifier.add(Dense(output_dim=1, init='uniform', activation='sigmoid'))#output la yekach variable aahe.binary outcome mule sigmoid
+
+classifier.compile(optimizer="Adam", loss='binary_crossentropy', metrics=['accuracy']) #compile kel optimizer adam joki gradient disent ch kam karto weight adust karun loss kami karayche. loss=binary iputput aslamule he ghetale. yanantr accuracy bghitli ti aahe te.
+
+classifier.fit(X_train, y_train, batch_size=100, nb_epoch=150) #tayar modek train kel aani yat 150 vela lern karel model epoch mule.aani pratekveli 100 cha data bach madhe houn jail.
+
+X_test
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+y_pred = (y_pred > 0.5)
+
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+sns.heatmap(cm,annot=True)
+plt.savefig('h.png')
+
+#First Accuracy after training
+(65+44)/114
+
+(64+44)/114
+
+
+
+      #######iries dataset(3 categories) ###########
+
+from google.colab import files
+
+uploaded = files.upload()
+
+for fn in uploaded.keys():
+print('User uploaded file "{name}" with length {length} bytes'.format(
+      name=fn, length=len(uploaded[fn])))   #import data
+
+import pandas as pd
+import io
+data=pd.read_csv(io.StringIO(uploaded['iris.data'].decode('utf-8')))
+data.head()    #import data
+
+dataset = pd.read_csv("iris.data")
+dataset                               #show dataset
+
+X = dataset.iloc[:,0:4].values
+y = dataset.iloc[:,4].values
+
+from sklearn.preprocessing import LabelEncoder
+encoder =  LabelEncoder()
+y1 = encoder.fit_transform(y)
+Y = pd.get_dummies(y1).values
+
+from sklearn.model_selection import train_test_split
+X_train,X_test, y_train,y_test = train_test_split(X,Y,test_size=0.2,random_state=0)
+
+Y1; Y
+
+model = Sequential()
+
+model.add(Dense(4,input_shape=(4,), activation='relu')) # 4 output aahet aani input shape madhe lihl ka tr aapla y ha matrix form madhe aahe
+
+model.add(Dense(3, activation='softmax')) #output 3 categori madhe aahe manun softmax
+
+model.compile(optimizer="Adam", loss='categorical_crossentropy', metrics=['accuracy']) #loss function  categorical ghetal karan binary output ny manun
+
+model.fit(X_train, y_train, batch_size=10, nb_epoch=100)
+
+y_pred = model.predict(X_test)
+y_test_class = np.argmax(y_test,axis=1)
+y_pred_class = np.argmax(y_pred,axis=1)  #x_test and Y_test ye class variable madhe store kele
+
+from sklearn.metrics import classification_report,confusion_matrix
+print(classification_report(y_test_class,y_pred_class))
+print(confusion_matrix(y_test_class,y_pred_class))        classification report baghitla
+
+
+
+
+     ####contineous dataset(online download) #############
+
+import pandas as pd
+BHNames= ['crim','zn','indus','chas','nox','rm',
+         'age','dis','rad','tax','ptratio','black','lstat','medv']  #columns name
+
+
+url='https://archive.ics.uci.edu/ml/machine-learning-databases/housing/housing.data'
+data = pd.read_csv(url, delim_whitespace=True, names=BHNames) #using online link open data
+
+print(data.head(20))
+print(data.info())
+
+'''
+CRIM: Per capita crime rate by town
+ZN: Proportion of residential land zoned for lots over 25,000 sq. ft    #parameters
+INDUS: Proportion of non-retail business acres per town
+CHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
+NOX: Nitric oxide concentration (parts per 10 million)
+RM: Average number of rooms per dwelling
+AGE: Proportion of owner-occupied units built prior to 1940
+DIS: Weighted distances to five Boston employment centers
+RAD: Index of accessibility to radial highways
+TAX: Full-value property tax rate per $10,000
+PTRATIO: Pupil-teacher ratio by town
+B: 1000(Bk — 0.63)², where Bk is the proportion of [people of African American descent] by town
+LSTAT: Percentage of lower status of the population
+MEDV: Median value of owner-occupied homes in $1000s'''   #target variable
+
+
+summary = data.describe()
+summary = summary.transpose()    #check summary of data
+print(summary)
+
+#To Scale data from 0 to 1 apply preprocessing Mms!
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()
+print(scaler.fit(data))
+DataScaled = scaler.fit_transform(data)
+DataScaled = pd.DataFrame(DataScaled, columns=BHNames)  #convert data minimax scale
+
+summary = DataScaled.describe()
+summary = summary.transpose()         #after scaling again check summary
+print(summary)
+
+import matplotlib.pyplot as plt
+boxplot = DataScaled.boxplot(column=BHNames)    #check outlier using boxplot
+plt.show()
+
+CorData = DataScaled.corr(method='pearson')
+with pd.option_context('display.max_rows', None, 'display.max_columns', CorData.shape[1]):
+    print(CorData)        #check correlation matrix
+
+plt.matshow(CorData)
+plt.xticks(range(len(CorData.columns)), CorData.columns)
+plt.yticks(range(len(CorData.columns)), CorData.columns)
+plt.colorbar()
+plt.show()                         #plottin heatmap check the correlation
+
+
+from sklearn.model_selection import train_test_split
+
+X = DataScaled.drop('medv', axis = 1)
+print('X shape = ',X.shape)
+Y = DataScaled['medv']
+print('Y shape = ',Y.shape)          
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.30, random_state = 5)
+print('X train shape = ',X_train.shape)
+print('X test shape = ', X_test.shape)
+print('Y train shape = ', Y_train.shape)
+print('Y test shape = ',Y_test.shape)
+
+#import keras
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+from keras import metrics
+
+#first input and first hidden layer
+model = Sequential()
+model.add(Dense(20,input_dim=13, activation='relu'))
+
+#second hidden layer
+model.add(Dense(10, activation='relu'))
+
+#output layer
+model.add(Dense(1, activation='linear'))   #data linear aslamule activation liner ghetl
+
+#compile ANN
+model.compile(optimizer="Adam", loss='mean_squared_error', metrics=['accuracy']) #loss mean square erros bghitl
+
+#fit and display the summary 
+model.fit(X_train,Y_train, epochs=1000, verbose=1) #verbose=1 kel tr epoch che visualisation nit hot
+
+model.summary() #yamule model madhe sagle parameter train zale ka ny te disnar
+
+
+#Multiple Linear Regression################(comarison sathi he ml madhun pn bghitl)
+from sklearn.linear_model import LinearRegression
+
+LModel = LinearRegression()
+LModel.fit(X_train, Y_train)
+
+Y_predLM = LModel.predict(X_test)
+
+plt.figure(1)
+plt.subplot(121)
+plt.scatter(Y_test, Y_predKM)
+plt.xlabel("Actual values")
+plt.ylabel("Predicted values")
+plt.title("Keras Neural Network Model")  #keras cha result che visualisation
+
+plt.subplot(122)
+plt.scatter(Y_test, Y_predLM)
+plt.xlabel("Actual values")
+plt.ylabel("Predicted values")
+plt.title("SKLearn Linear Regression Model")  #ML che usualisation kel
+plt.show()
+
+from sklearn.metrics import mean_squared_error
+
+mse = mean_squared_error(Y_test, Y_predLM)
+print('Linear Regression Model Mean Square Error')
+print(mse)                                                #ML final result
+
+
+
+    ############# handdle overfitind data(drop out) ###########
+kadhi kadhe jast note astil tr overfitting pn hou shatkt asha veli aapn pratek hidden layer vart dropout aaply karto aani bghto
+ yat p=0.1 set kel manje total node madhle 10% node delete kele tasch 0.5 manje 50% node delete zale.
+
+from keras.layers import Dropout
+classifier.add(Dropout(p=1.0))    pratek layer cha kali hi command takli ki te tya layer varti kam kart
+
+
+
+
+
+###########Bias-tradeoff#########  Ha kalcha code ANN first model cha pude aahe#
+#######K_fold##############
+we can run the model multiple time means yekach model aapn multiple time run kel tr pratek veli accuracy kami jiva jast hotiye karan te puna navin vegvegla padhatin train hot tamule tach variation la bias and variance-tredoff boltat. he overcome karnyasathi k-fold cross validation waigare bghu
+
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import cross_val_score
+from keras.models import Sequential
+from keras.layers import Dense
+def built_classifier():          #create function
+  classifier = Sequential()
+  classifier.add(Dense(output_dim=16, init='uniform', activation='relu',input_dim=30))
+  classifier.add(Dense(output_dim=16, init='uniform', activation='relu'))
+  classifier.add(Dense(output_dim=1, init='uniform', activation='sigmoid'))
+  classifier.compile(optimizer="Adam", loss='binary_crossentropy', metrics=['accuracy'])
+  return classifier
+
+classifier = KerasClassifier(build_fn = built_classifier, batch_size = 100, epochs=100)
+accuracies = cross_val_score(estimator = classifier, X = X_train, y=y_train, cv=10, n_jobs =-1)     #cross validation ne te k fold bghitle
+
+accuracies      ##10 fold madhe accuracy disel
+
+accuracies.mean()
+
+accuracies.std()    #sd no variation bghitl
+
+
+
+
+              ######### hyperparameter tunning (gridge surch) ###########
+import keras
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import GridSearchCV
+from keras.models import Sequential
+from keras.layers import Dense
+def built_classifier(optimizer = 'adam'):
+  classifier = Sequential()
+  classifier.add(Dense(output_dim=16, init='uniform', activation='relu',input_dim=30))
+  classifier.add(Dense(output_dim=16, init='uniform', activation='relu'))
+  classifier.add(Dense(output_dim=1, init='uniform', activation='sigmoid'))
+  classifier.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+  return classifier
+
+classifier = KerasClassifier(build_fn = built_classifier)
+parameters = {'batch_size': [10, 32],'epochs': [100, 500],'optimizer': ['adam', 'rmsprop']}
+grid_search = GridSearchCV(estimator = classifier, param_grid = parameters, scoring = 'accuracy',
+                           cv = 10)
+
+grid_search = grid_search.fit(X_train, y_train)
+best_parameters = grid_search.best_params_
+best_accuracy = grid_search.best_score_
+
+
+  ##############Ridge regression or lassor regression##############
+that use for minimizing the compexity of parameter or overcome the overfitting problem
+
+import pandas as pd
+BHNames= ['crim','zn','indus','chas','nox','rm',
+         'age','dis','rad','tax','ptratio','black','lstat','medv']
+
+
+url='https://archive.ics.uci.edu/ml/machine-learning-databases/housing/housing.data'
+data = pd.read_csv(url, delim_whitespace=True, names=BHNames)
+
+print(data.head(20))
+
+
+'''
+CRIM: Per capita crime rate by town
+ZN: Proportion of residential land zoned for lots over 25,000 sq. ft
+INDUS: Proportion of non-retail business acres per town
+CHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
+NOX: Nitric oxide concentration (parts per 10 million)
+RM: Average number of rooms per dwelling
+AGE: Proportion of owner-occupied units built prior to 1940
+DIS: Weighted distances to five Boston employment centers
+RAD: Index of accessibility to radial highways
+TAX: Full-value property tax rate per $10,000
+PTRATIO: Pupil-teacher ratio by town
+B: 1000(Bk — 0.63)², where Bk is the proportion of [people of African American descent] by town
+LSTAT: Percentage of lower status of the population
+MEDV: Median value of owner-occupied homes in $1000s'''    use the online dataset
+
+
+from sklearn.model_selection import train_test_split
+
+X = data.drop('medv', axis = 1)
+print('X shape = ',X.shape)
+Y = data['medv']
+print('Y shape = ',Y.shape)       #train test split
+
+
+from sklearn import linear_model
+import matplotlib.pyplot as plt
+
+names = data.drop('medv', axis =1).columns  #acces the colum names
+print(names)
+
+lasso = linear_model.Lasso(alpha=0.2) # lasso regression with penulty 0.2
+lasso_coef = lasso.fit(X,Y).coef_
+
+plt.plot(range(len(names)),lasso_coef )
+plt.xticks(range(len(names)), names, rotation=60)
+plt.ylabel("coefficient")
+plt.show()                       #plotting graph to check which variable are important or not
+
+
+   ###ridge#########
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+x_std = scaler.fit_transform(X)     #standerdized the variables
+
+from sklearn.linear_model import Ridge
+ridge = Ridge(alpha=0.2)
+
+model = ridge.fit(x_std,Y).coef_

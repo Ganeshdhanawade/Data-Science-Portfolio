@@ -1,0 +1,6 @@
+      ######### keras ########
+keras is high level neural network API,written in python. this is the labrory of tensorflow. deep lerning reqirement fullfill kart. CNN and RNN also supported here 
+its run on: CPU=central processing unit , GPU=graphic processing unit = graphical presentation changl hot , TPU= tensor processing unit.
+
+    ############# tensorflow #######
+this is free or open source librory it math based librory its solve machine lerning as will as deep learning problem.

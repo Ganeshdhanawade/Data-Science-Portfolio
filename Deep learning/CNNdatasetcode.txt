@@ -1,0 +1,424 @@
+     ########CNN(dog_cat dataset)#########
+this data contain under one file have 3 folder one folder have training data in that training  data have two saperate folers one folder have cat training data and other have dog training data.similierly other folder have same testing data and last folder have one emage of cat and other emage of dog.all the emages are 28*28 sizes and accordingly we can perform the following oprations.
+
+#get acess google drive data into google colab
+from google.colab import drive
+drive.mount('/content/drive')     #this code use to connect your drive in google colab
+
+
+from zipfile import ZipFile
+file_name = "/content/drive/My Drive/dataset.zip"  #our file is zip format so we can give the file path
+with ZipFile(file_name,'r') as zip:  #above file path to read the file r=read
+  zip.extractall()                    #after reading extract the file
+  print('finish')                    #one exaction complete desplay the finish comment
+
+!pip install -q keras    #install keras
+
+# Importing the Keras libraries and packages
+from keras.models import Sequential       #create sequens of the models
+from keras.layers import Conv2D           #create convolutional layer
+from keras.layers import MaxPooling2D     #create maxpooling layer
+from keras.layers import Flatten        #create vector form of the leayr
+from keras.layers import Dense          #use the ANN dence layer
+
+
+# Initialising the CNN
+
+CNN_Classifier=Sequential();
+
+# Step 1 - Convolution
+CNN_Classifier.add(Conv2D(32,(3,3),input_shape=(64,64,3),activation='relu')) #that layer we use 32 filters and each filter have 3*3 matrix out input image is 64*64 pixel and all are colur so we use dimension3
+
+# Step 2 - Pooling
+CNN_Classifier.add(MaxPooling2D(pool_size=(2,2))) #we use max pooling with 2*2 matrix
+
+# Step 1 - Convolution
+CNN_Classifier.add(Conv2D(16,(3,3),activation='relu')) #agin apply 2nd convolutional layer with 16 types of filters
+
+# Step 2 - Pooling
+CNN_Classifier.add(MaxPooling2D(pool_size=(2,2))) #2nd pooling layer
+
+
+# Step 3 - Flattening
+CNN_Classifier.add(Flatten())  # convert last output in vector formate (pooling map output)
+
+# Step 4 - Full connection
+
+CNN_Classifier.add(Dense(units=128, activation='relu'))  #apply dence layer with 128 nodes
+CNN_Classifier.add(Dense(units=1, activation='sigmoid')) #output is binary nature so we use sigmoid function
+
+# Compiling the CNN
+CNN_Classifier.compile(optimizer ='adam',loss='binary_crossentropy',metrics=['accuracy'])       #compile the problem
+
+
+  # all emages are seprate folder not in mixed so we can use the Image data genrator###
+
+  #####.flow_from_directory(directory):######### use saperate file of data.binary classifictation sathi
+
+from keras.preprocessing.image import ImageDataGenerator
+
+train_datagen = ImageDataGenerator(rescale = 1./255,      #reshapeing
+                                   shear_range = 0.2,
+                                   zoom_range = 0.2,
+                                   horizontal_flip = True)
+
+test_datagen = ImageDataGenerator(rescale = 1./255)  #donivr pn vaparl
+
+training_set = train_datagen.flow_from_directory('/content/dataset/training_set',
+                                                 target_size = (64, 64),
+                                                 batch_size = 32,
+                                                 class_mode = 'binary')
+
+test_set = test_datagen.flow_from_directory('/content/dataset/test_set',
+                                            target_size = (64, 64),
+                                            batch_size = 32,
+                                            class_mode = 'binary') #binary model aslamule aapn he sagl vaprt
+
+CCN_Classifier.fit_generator(training_set,
+                         steps_per_epoch = 7000,
+                         epochs = 10,
+                         validation_data = test_set,
+                         validation_steps = 2000)      #data la train test madhe convert kelaver fit kel aapla ccN_classifer varti
+
+#precdict karuyat aapn dig che singl emage deun model currect predict kartay ka te
+
+import numpy as np 
+from keras.preprocessing import image
+test_image=image.load_img('/content/dataset/single_prediction/cat_or_dog_1.jpg'.],target_size=(64,64))
+test_image=image.img_to_array(test_image)
+test_image=np.expand_dims(test_image,axis=0)
+result=CNN_Classifier.predict(test_image)
+training_set.class_indices
+if result[0][0]==1:
+ prediction='dog'
+ print(prediction)
+else:
+prediction='cat'
+print(prediction)      #answer bghitl aapli emage cat aahe ka dog te 
+
+
+import numpy as np 
+from keras.preprocessing import image
+test_image=image.load_img('/content/dataset/single_prediction/cat_or_dog_2.jpg'.],target_size=(64,64))
+test_image=image.img_to_array(test_image)
+test_image=np.expand_dims(test_image,axis=0)
+result=CNN_Classifier.predict(test_image)
+training_set.class_indices
+if result[0][0]==1:
+ prediction='dog'
+ print(prediction)
+else:
+prediction='cat'
+print(prediction)      #answer bghitl aapli emage cat aahe ka dog te dusrya image sathi
+
+
+
+    ##### dataset mixed data cat_dog for online file #################
+
+# There 2,000 images  dataset available on Kaggle, which contains 25,000 images.
+# Here, we use a subset of the full dataset to decrease training time for Tutorial only!
+
+!wget --no-check-certificate \
+    https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip \
+    -O /tmp/cats_and_dogs_filtered.zip         #online dataset link yane download kara aani ti zip file tumcha drive madhe gheun theva
+
+import os
+import zipfile
+
+local_zip = '/tmp/cats_and_dogs_filtered.zip'
+zip_ref = zipfile.ZipFile(local_zip, 'r')
+zip_ref.extractall('/tmp')
+zip_ref.close()                     #extract file
+
+
+##data yekatach aslamule aapn data seprate kela traning cat ,trening dog tachpramane test madhe sudha aapn changes kele
+base_dir = '/tmp/cats_and_dogs_filtered'
+train_dir = os.path.join(base_dir, 'train')
+validation_dir = os.path.join(base_dir, 'validation')
+
+# Directory with our training cat pictures
+train_cats_dir = os.path.join(train_dir, 'cats')
+
+# Directory with our training dog pictures
+train_dogs_dir = os.path.join(train_dir, 'dogs')
+
+# Directory with our Testing cat pictures
+Testing_cats_dir = os.path.join(validation_dir, 'cats')
+
+# Directory with our Testing dog pictures
+Testing_dogs_dir = os.path.join(validation_dir, 'dogs')
+
+print('total training cat images:', len(os.listdir(train_cats_dir)))
+print('total training dog images:', len(os.listdir(train_dogs_dir)))
+print('total Testing cat images:', len(os.listdir(Testing_cats_dir)))
+print('total Testing dog images:', len(os.listdir(Testing_dogs_dir)))  #quantity baghitli train test data chi thoskyat shape bghitla
+
+from tensorflow.keras import layers
+from tensorflow.keras import Model
+
+img_input = layers.Input(shape=(150, 150, 3))
+x = layers.Conv2D(16, 3, activation='relu')(img_input)
+x = layers.MaxPooling2D(2)(x)
+
+
+x = layers.Conv2D(32, 3, activation='relu')(x)
+x = layers.MaxPooling2D(2)(x)
+
+
+x = layers.Conv2D(64, 3, activation='relu')(x)
+x = layers.MaxPooling2D(2)(x)
+
+
+x = layers.Flatten()(x)
+
+x = layers.Dense(512, activation='relu')(x)
+
+output = layers.Dense(1, activation='sigmoid')(x)
+
+# Create model:
+# input = input feature map
+# output = input feature map + stacked convolution/maxpooling layers + fully 
+# connected layer + sigmoid output layer
+model = Model(img_input, output)
+    
+
+model.summary()
+
+from tensorflow.keras.optimizers import RMSprop
+
+model.compile(loss='binary_crossentropy',
+              optimizer=RMSprop(lr=0.001),
+              metrics=['acc'])                 #compile model
+
+#ImagedataGenerator to prevent overfitting
+
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+# All images will be rescaled by 1./255 . magcha dataset sarkhch keley
+train_datagen = ImageDataGenerator(rescale=1./255)
+val_datagen = ImageDataGenerator(rescale=1./255)
+
+# Flow training images in batches of 20 using train_datagen generator
+train_generator = train_datagen.flow_from_directory(
+        train_dir,  # This is the source directory for training images
+        target_size=(150, 150),  # All images will be resized to 150x150
+        batch_size=20,
+        # Since we use binary_crossentropy loss, we need binary labels
+        class_mode='binary')
+
+
+# Flow validation images in batches of 20 using val_datagen generator
+validation_generator = val_datagen.flow_from_directory(
+        validation_dir,
+        target_size=(150, 150),
+        batch_size=20,
+        class_mode='binary')
+
+history = model.fit_generator(
+      train_generator,
+      steps_per_epoch=100,  # 2000 images = batch_size * steps
+      epochs=15,
+      validation_data=validation_generator,
+      validation_steps=50,  # 1000 images = batch_size * steps
+      verbose=2)
+    
+
+
+
+   ############## MNIST(Modified National Institute Standerd Technology)########
+
+this dataset have 0 to 9 number avilable and image is 28*28 size kiva pixel. handwritting formate madhlya emage kasha olkhnar tyasthi1989 madhe yann lecun yane yach shodh lavla. ha pn online banchmark formate madhe dataset aahe inbilt keras madhe aahe.
+
+# mnist (benchmark) dataset
+
+# It is a dataset of handwritten images
+
+# http://yann.lecun.com/exdb/mnist/
+
+
+# The MNIST database of handwritten digits, available from this page, has a training set of 60,000 examples, 
+# and a test set of 10,000 examples. It is a subset of a larger set available from NIST. The digits have been
+# size-normalized and centered in a fixed-size image.
+
+# It is a good database for people who want to try learning techniques and pattern recognition methods on real-world 
+# data while spending minimal efforts on preprocessing and formatting.'''
+
+!pip install keras
+
+import numpy as np 
+import keras  
+from keras.datasets import mnist  #import dataset
+from keras.models import Model 
+from keras.layers import Dense, Input
+from keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten 
+from keras import backend as k 
+
+(x_train, y_train), (x_test, y_test) = mnist.load_data()  #distribute data
+
+# Display the dataset  testing size visualize te number kiti aahet te bghuyat
+from matplotlib import pyplot
+print('Train: X=%s, y=%s' % (x_train.shape, y_train.shape))
+print('Test: X=%s, y=%s' % (x_test.shape, y_test.shape))
+# plot first few images
+for i in range(9):
+	# define subplot
+	pyplot.subplot(330 + 1 + i)
+	# plot raw pixel data
+	pyplot.imshow(x_train[i], cmap=pyplot.get_cmap('gray'))
+# show the figure
+pyplot.show()
+
+img_rows, img_cols=28, 28    #28 cha chinel vr convert kela saglya emage
+  
+if k.image_data_format() == 'channels_first': 
+  #reshape dataset to have a single channel
+   x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols) 
+   x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols) 
+   inpx = (1, img_rows, img_cols) 
+else:
+  #reshape dataset to have a single channel
+   x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1) 
+   x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1) 
+   inpx = (img_rows, img_cols, 1)
+
+#convert from integers to floats
+x_train = x_train.astype('float32') 
+x_test = x_test.astype('float32') 
+
+# Nor. 0 to 1
+x_train /= 255
+x_test /= 255       #normalize kel 0 and 1 madhe
+
+# convert class vectors to binary class matrices  OR one hot encode target values
+y_train = keras.utils.to_categorical(y_train) 
+y_test = keras.utils.to_categorical(y_test) 
+
+inpx = Input(shape=inpx) 
+layer1 = Conv2D(32, kernel_size=(3, 3), activation='relu')(inpx) 
+layer2 = Conv2D(64, (3, 3), activation='relu')(layer1) 
+layer3 = MaxPooling2D(pool_size=(3, 3))(layer2) 
+# To prevent overfitting 
+layer4 = Dropout(0.5)(layer3)    # data buch madhe aslamule he overfinting sathi vaprl
+ 
+layer5 = Flatten()(layer4) 
+layer6 = Dense(250, activation='sigmoid')(layer5) 
+layer7 = Dense(10, activation='softmax')(layer6) 
+
+model = Model([inpx], layer7) 
+model.compile(optimizer=keras.optimizers.Adadelta(), 
+              loss=keras.losses.categorical_crossentropy, 
+              metrics=['accuracy'])
+
+model.fit(x_train, y_train, epochs=12, batch_size=500) 
+
+score = model.evaluate(x_test, y_test, verbose=0) 
+print('loss=', score[0]) 
+print('accuracy=', score[1])
+
+#sinle Value predication in number
+predictions = model.predict(x_test)
+print(np.argmax(np.round(predictions[2])))  #2 number chi emage konti aahe suppose 1 aali
+
+#sinle Value predication in graph (plot)
+import matplotlib.pyplot as plt
+plt.imshow(x_test[2].reshape(28, 28), cmap = plt.cm.binary)
+plt.show()          #ith baghitl model image 2nach yetiye ka ny te
+
+
+
+     ########### T-shurt datasets#############
+# Fashion-MNIST is a dataset of Zalando's article images consisting of a training set of 60,000 examples and a test set of 10,000 examples. 
+# Each example is a 28x28 grayscale image, associated with a label from 10 classes.
+
+
+'''Labels
+
+Each training and test example is assigned to one of the following labels:
+
+0 T-shirt/top
+1 Trouser
+2 Pullover
+3 Dress
+4 Coat
+5 Sandal
+6 Shirt
+7 Sneaker
+8 Bag
+9 Ankle boot '''
+
+# for further assistance https://www.kaggle.com/zalando-research/fashionmnist
+
+import keras
+from keras.datasets import fashion_mnist 
+from keras.layers import Dense, Activation, Flatten, Conv2D, MaxPooling2D
+from keras.models import Sequential
+from keras.utils import to_categorical
+import numpy as np
+import matplotlib.pyplot as plt
+​
+(train_X,train_Y), (test_X,test_Y) = fashion_mnist.load_data()
+
+# example of loading the fashion mnist dataset
+from matplotlib import pyplot
+from keras.datasets import fashion_mnist
+# load dataset
+(trainX, trainy), (testX, testy) = fashion_mnist.load_data()
+# summarize loaded dataset
+print('Train: X=%s, y=%s' % (trainX.shape, trainy.shape))
+print('Test: X=%s, y=%s' % (testX.shape, testy.shape))
+# plot first few images
+for i in range(9):
+	# define subplot
+	pyplot.subplot(330 + 1 + i)
+	# plot raw pixel data
+	pyplot.imshow(trainX[i], cmap=pyplot.get_cmap('gray'))
+# show the figure
+pyplot.show()
+
+# reshape dataset to have a single channel
+train_X = train_X.reshape(-1, 28,28, 1)
+test_X = test_X.reshape(-1, 28,28, 1)
+
+##convert from integers to floats
+train_X = train_X.astype('float32')
+test_X = test_X.astype('float32')
+
+#Nor. 0 to 1
+train_X = train_X / 255
+test_X = test_X / 255
+
+# convert to one hot encoder (vector)
+train_Y_one_hot = to_categorical(train_Y)
+test_Y_one_hot = to_categorical(test_Y)
+
+model = Sequential()
+
+model.add(Conv2D(64, (3,3), input_shape=(28, 28, 1)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+
+model.add(Conv2D(64, (3,3)))
+model.add(Activation('relu'))
+model.add(MaxPooling2D(pool_size=(2,2)))
+
+model.add(Flatten())
+model.add(Dense(64))
+
+model.add(Dense(10))
+model.add(Activation('softmax'))
+
+model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(),metrics=['accuracy'])
+
+model.fit(train_X, train_Y_one_hot, batch_size=64, epochs=5)
+
+test_loss, test_acc = model.evaluate(test_X, test_Y_one_hot)
+print('Test loss', test_loss)
+print('Test accuracy', test_acc)
+
+#sinle Value predication in number (category)
+predictions = model.predict(test_X)
+print(np.argmax(np.round(predictions[1])))
+
+#sinle Value predication in graph (plot)
+plt.imshow(test_X[1].reshape(28, 28), cmap = plt.cm.binary)
+plt.show()

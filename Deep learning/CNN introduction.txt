@@ -1,0 +1,40 @@
+          #############CNN(convolutional nural netework)(emage processing)############
+
+theory:
+image processing: is method to perform opration in emage and get the usefull information imput is emage or output is charecteristic or emage formate .enance karnyasathi upyog karto
+computer vison: humman sarkh reate kart dolyasarkh mansasarkh bght aani get the output .he kam thod defucult ast.
+
+yeka lahan mulala jar aaplala abcd shikvaychi asel tr aapn a for elifient waigre as sangto aani to bghun visualise karto aani nantr tachapramane answer deto tasch aaplaya yeka machine la he shikvaychy talach convolution nural netework boltat.
+
+emage aaplala grey scale varti kanvert karave lagte karn yat emage blak and white formate madhe aste aani yache sagle code madhe convert kele tr 255 color code astat. yat yekach color code shade aahe kiva tala aapn one channel pn manu shakto aapn jeva emage la pixel madhe convert karu teva hi hekach honar.yamule data 2D madhe plot hoil
+
+pn emage color madhe asel tr tith colur bharpur astat pn red,green ,blue colur cha combination ne bakiche sagle colour bantat tamule ithe 3 shade kiva 3 vegveglya pixel madhe emage la convert karun aaplala bghayla lagte tache dimension pn 3 honar he run kary pc la khoop vel lagto tamule bettter he aahe ki tumi emage la gray scale madhe convert kara.(RGB)
+
+pixel= manje aapn yeka emage la chotya chotya tukdanmadhe convert kato 1000 kiva lakho madhe pn mg row madhe 100 column madhe 100 ase 100*100 cha matrix tayar hoil aani pratek pixel la 255 madhe aaslela aani tith acul madhe aslelya colour nusar code jail.
+
+steps how to work CNN:
+1)convolution
+2)Max Pooling
+3)Flattning
+4)full connection
+
+  ######1)convolution###
+suppose aapli emage hi 7*7 pixel che aahe aani yamadhe diffrent colur code aahet tumi tasech theva keva standerdized karun tum tana 0 or 1 madhe conver kara tya impage la imput boltat aata aaplala tya sagli image nako kiva aajubajuche nako aslele feature nako aahet asha veko aapn yachavr feature detector or kernel or filter . yache kam he ast ki aaplaya impage la vegveglay point of view madhe bghne ahe bharpur feature detector vegvegla dimesion madhe astat. ase filter aapn vaprun aapn aapli emage compress karachi .filter 3*3 cha asel tr emage tya form madhe convert hoil aani he aaplya orignal input pasun one by one pudh jail aani ta emage adhe aslele point mach zale ki count kart janar aani navin 3*3 from madhe lihnar ase aapn bharpur filter aaply kary vegveglya point of view madhe emage convert karnar. yach filter madhun tayar zalelya grop la aapn convolution layer as bolto. aani filter aaply kelav aalelya yeka emage la aapn feature map bolto.(karn kadhi dark falt emage karun bghaych)
+eg.sharpen,blurd,custum,imbord etc bharpur aahet
+orignal data non liner aahe pn he filter aaply kelavr linearity yete ti ghalvayla aapn relu fucntion vaparto.
+
+
+  #############2)Pooling ###########
+a pooling is anather bulding block of CNN. its function is to progressivly reduce the spatial sixe of the representation to reduce amount of parameters and computation in the network.yat aajun kami dimension karayla aapn pulling layer vaparto he pn same varyagt ast aadhi kiti by kiti cha matrix karyachay to takun ha pn firto pn frk yevda aahe ki ha matrix interaction madhe ny saperate form madhe firto aani count ny tr max value kiva avrage waigre kadun lihto maximum time max approch jast vaparla jato. final la yeto tala pool feture map mantat.
+
+ ###########3)flattning #########
+he simply aapla pool feature map la vector form madhe yeto jeki pixel form aapl reduce houn vector form madhe aala 2*2 matrix asel tr vecor madhe 4 element yetil yalach fattning boltat. he fattning cha vector che element astat hech aaple RNN che input astat.
+
+  #########4)fully connection##########
+ithe aapn fully connected RNN use karto yamadhe aapn multiple input deto fattning che aani output aaplanusar kadto
+
+  ########softmax activation######
+yamadhe 5 category astil tr kas karnar ki konala kiti probability daychi softmax mule te sanglana pratek categorila tacha wieght nusar wieight assing kart jeki saglya output prob chi sum equal yete. aani tachanusar jast ja category chi porb aahe te aaply output la ti category sangnar.
+
+
+
