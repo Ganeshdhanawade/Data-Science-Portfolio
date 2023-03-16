@@ -277,4 +277,4 @@ plt.plot(range(1,21),rmse_val)                             ## Plot on graph
  
  #https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa25CWjRUQTBJeVJNMTYwTVNRS2xsQjE2cmh0d3xBQ3Jtc0tuNnhGek54bmNEdHUyNV94NXRTN0pwc253ZW5xWlJGWl92cWRmU2lsbU5sRDBLN3VtUDFRdG5oa2taZXM0S1d0WE5CcWxnUWFDNkFXbU5nSzNDY1BhQkhXSVFDbnNrc29mZ1MzV2FnYUpza3B3QWFNdw&q=https%3A%2F%2Fmachinelearningmastery.com%2Fmulti-output-regression-models-with-python%2F&v=26J3bcqhfLE  #check refrence 
  
- 
+ ##https://machinelearningmastery.com/multi-output-regression-models-with-python/  #material
