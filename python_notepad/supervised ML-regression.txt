@@ -267,3 +267,12 @@ for K in range(30):
     print('RMSE value for k= ' , K , 'is:', error)                        #fit line with KNN for using loop to select best value of k is to minimum RMSE
 
 plt.plot(range(1,21),rmse_val)                             ## Plot on graph
+
+
+     ############# multi-output regression variable ###########
+     
+ if your dataset have the multiple output means more than two dependant or responce variable so you can use that model for the prediction
+ 
+ from sklearn.multioutput import MultiOutputRegressor
+ 
+ 
