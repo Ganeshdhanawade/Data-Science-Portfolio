@@ -45,6 +45,30 @@ Three techiniques :
 4)modling:buld the model and evaluate the model for the performance and select best model
 5)deplyment:1)swata deployment 2)monetaring:run kartoy teva monitor karto without changes 3)and model update.
 
+1)data Acquisition:
+centiment analysis sathi 1)data avilabe aahe:database madhe asel kiva kami asel kami data asel tr data Augumentation cha vapar karun fake data genrage karu shakta *synonemes ne replace karu shakta meaning same rahil pan sencence naving genrate hoil *bigram flip:two word che combination through karto *back translate:dusrya language varun puna orignal aanto jeki navin data arrengement kart *add noice
+                         2)company madhe dustrikade aahe:data engeear vale kadun detil:*public database:publically dataset bagha sutable asel kiva nasel *web scraping:computative aahe aapla appsite vale tanchakadun aapn gheu shakto beutifull soop is example *API:textual API dataset shodun gha rapidAPI is example to feach data request karun gha jeson formate madhe asu shakto *pdf:read data for pdf *image:image cha aatun data extract daru shakta *audio:oudio asel tr speech to text library cha vapar karun aapla formate madhe aanu shakta 
+                         3)kiva data avilable nasel kytri jugad karay lagel:*survey: review manuaaly baghay lagel re vapru shakta
+                         
+                         
+  Data preprocessing:data not poroper formate
+                    1)cleaning:*html tags waigare ghalvne re vaprun : eg.p=re.compile(r'<.*?>') and p.sub('',data) to subtract the html tag*imogis ghalvne:data.encode('utf-8') to create imogis pattern and remove them*speling mistake:from textblob import TextBlob ==> t=TextBlob(data)==>t.correct()
+                    2)basic:**tokanization:
+                            1)sentence tokanization: from nltk.tokenize import sent_tokenize ==> t=sent_tokenize(data)
+                            2)word tokanization:from nltk.tokenize import word_tokenize ==> word_tokenize(data)
+                            **optimal:
+                             1)stopwords: (and,or,not this he sangle stopword ghalva)
+                             2)stemming: 
+                             3)lemitisation 4)remove digits 5)lower case convertion 6)language detection
+                    3)advance preprocessing:*pos tagging *parsing
+                    
+                    
+   3)feature engeenearing:convert text to number
+    movie review sentiment analysis:*bag of word *tfidf*one hot incoding *word2vec:deep learnig
+            ML:swata feature kadave lagtat based on your domain knowladge :advantage: aapla result mule asa result ka aala sangu shakto ,DL:prepresessing karun deep learnig madhe taka embedding pn bolu shakto yala :advan:ithe aapn ny sangu sahkt ky kely tane aat madhe
+    
+
+
 
   #### Old re(reguler expression) concept #####
  now this is the old concept but use the our NLP concept now whatever your sentence are invert into the token means each worrd of stetment is call by the token but some way i will use full stop, lash(/),(?) meny more that icon is called punctuation in here.so her re not understand that puctuation in sentence and not to separe esily, becouse that sepration here we can call many function and seprate it. so we use SpaCy library that library is seprate obove problem esily. some exaple we can show in re below but we not use re in most time. Ntural language toolkit(NLTK),SpaCy and SKlearn these are more usefully libraries in the NLP.
