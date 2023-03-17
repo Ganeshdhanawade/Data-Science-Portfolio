@@ -1,7 +1,7 @@
           ############ Natural Language Processing ###########
 the mostly used the natural language processing in the text data now whatever i can talk the machine will understand the our language and answer the quation but the answer the quation that machine gose through various steps. 1st machine will understand our langulage and anser the relavant answer in our quation. so mostly three steps are used in NLP=NLG(natural laguage genralisation) + NLU(natural languate understanding) NLG is basically writting the laguage and NLU is the understand our language.The exaples of NLP is the voice recugnisation,google translate,chatboot,Q&A,eye checker-see the object and display the name,vidio caption etc.now google,amazon,microsoft,apple the are most reputed companys are work with nlp.Or more information we can disscuss in aboe ppt plese see.
 
-    #uses ##
+    ##uses ##
 1)document classification: newspaper to assign category news,pality
 2)centiment analysis: by the review what is the centiment of my product to show your percentage of possitive riview
 3)information retrieval: to extrac the information like date,name etc in perticuler sentence(name entity recgnisation use to extact information to here)
