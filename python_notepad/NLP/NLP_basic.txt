@@ -67,6 +67,17 @@ centiment analysis sathi 1)data avilabe aahe:database madhe asel kiva kami asel 
     movie review sentiment analysis:*bag of word *tfidf*one hot incoding *word2vec:deep learnig
             ML:swata feature kadave lagtat based on your domain knowladge :advantage: aapla result mule asa result ka aala sangu shakto ,DL:prepresessing karun deep learnig madhe taka embedding pn bolu shakto yala :advan:ithe aapn ny sangu sahkt ky kely tane aat madhe
     
+4)modeling:*hurestic approch: *ML algorithm: *DL:*cloud API:AWS wigre tanche allredy astat tancah url call karun kam hoil
+            depends on : amount of data and nature of problem, transform learning:allredy datavarti train asnara data direct used karun tumi tumche kam karu shakta(cykal yet asel tr two viler chalvay la pn yenar asha type madhe asnar aahe he sangle)
+            
+ 
+5)evaluation:
+    a)intrinsic evaluation :use accuracy,sensitivity,precision,technical level var kam aste
+    b)extrinsic evaluation : after deplyoing bisness type madhe used karto karn to tumcha product tayar zala
+        perplexity: is that matric they show you probability of how the your model is to prfect.
+            ex: jr chat madhe type kelavr model suggesion det next word sathi pn tumcha user tumche suggesion vr ny clic kart tr ha problem aahe aani ha extrinsic problem zala.   
+
+Deployment:1)deploy:2)monitoring:3)update: #Quora is quation answer website
 
 
 
