@@ -1,6 +1,44 @@
           ############ Natural Language Processing ###########
 the mostly used the natural language processing in the text data now whatever i can talk the machine will understand the our language and answer the quation but the answer the quation that machine gose through various steps. 1st machine will understand our langulage and anser the relavant answer in our quation. so mostly three steps are used in NLP=NLG(natural laguage genralisation) + NLU(natural languate understanding) NLG is basically writting the laguage and NLU is the understand our language.The exaples of NLP is the voice recugnisation,google translate,chatboot,Q&A,eye checker-see the object and display the name,vidio caption etc.now google,amazon,microsoft,apple the are most reputed companys are work with nlp.Or more information we can disscuss in aboe ppt plese see.
 
+    #uses ##
+1)document classification: newspaper to assign category news,pality
+2)centiment analysis: by the review what is the centiment of my product to show your percentage of possitive riview
+3)information retrieval: to extrac the information like date,name etc in perticuler sentence(name entity recgnisation use to extact information to here)
+4) part of speech tagging: nown kiva verb aahe he sangt
+5)language detection and machine translation: language detect input and based input output sangl tumacha language deep learning used
+6)conversational Agents:chatspace kiva speechsapce chatbut thodkyat
+7)knowladge graph and QA system: jast data combine karun knowlage graph karun QA la vapru shakta google is best example quation vicharl ki direct ans yet
+8)text summarization: summary of news waigre det
+9)Topic modeling: khupp motha information asel tr te konatya topic related aahe he sangt LTA madhe aahe
+10)Text genration: privious typing varun new word ky aahe sangt(grammer checker spell mistake is are examples)
+11)text parsisng:
+12)speech to text:bolto aani text madhe convert karto (spek to write)
+
+     #mostly used techniques##
+Three techiniques :
+    1)heuristic approaches: rule based approch (no of possitive aani no of negavie word count karun answer deich)
+                          re(regular expression) is example, paragraph madhun patter baghu shakto,2)wordnet:word chi information with relation in other words
+                           advantage:give quick result and answer gives more accurate
+                        
+2)machine learning approch: it not used in rule based genraly,it create rules by showing the dataset
+                            1)convert text to number and get the answer whatever you ky do
+                            algorithm used:naive bayes,logistic regression,SVM,LDA,Hidden markov models mostly used
+3)deep learning approches:advantage:1)it answer the problem by the sequential information based but machnie learning approch                loose the information.
+                   algorithm:1)RNN,lamba sentence vr nit ny kam karat mg LSTM memory jast store kart tamule LSTM nantr GRU and             image used CNN,next Transformers:specific part varti attenstion provide kart he val.
+                     transformer is very good transformer based BERT is best example transformer varun used karta outo                      incoder,decoder is used to machine translater
+                                     Algorithm:RNN,LSTM,GRU/CNN,transformer,Autoencoders
+                                     
+ ## challanges:
+    machine are not reccugnize the weard part: its challanging
+1)Ambiguity:more meaning sentences
+2)contextural words
+3)colloquialisms and slang:aapla bhashatl shabd tala ny samjt(tang khichana :pooling of leg he te sirious shabdasaha meaning ghet)
+4)synonyms  and speling mistakes aapn samju shakto machine nahi
+5)creativity
+6)saglya language varti application ny banau shakat.   
+
+
   #### Old re(reguler expression) concept #####
  now this is the old concept but use the our NLP concept now whatever your sentence are invert into the token means each worrd of stetment is call by the token but some way i will use full stop, lash(/),(?) meny more that icon is called punctuation in here.so her re not understand that puctuation in sentence and not to separe esily, becouse that sepration here we can call many function and seprate it. so we use SpaCy library that library is seprate obove problem esily. some exaple we can show in re below but we not use re in most time. Ntural language toolkit(NLTK),SpaCy and SKlearn these are more usefully libraries in the NLP.
 
