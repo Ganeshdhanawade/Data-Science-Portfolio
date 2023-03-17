@@ -36,7 +36,14 @@ Three techiniques :
 3)colloquialisms and slang:aapla bhashatl shabd tala ny samjt(tang khichana :pooling of leg he te sirious shabdasaha meaning ghet)
 4)synonyms  and speling mistakes aapn samju shakto machine nahi
 5)creativity
-6)saglya language varti application ny banau shakat.   
+6)saglya language varti application ny banau shakat. 
+
+  ######NLP pipeline:without data you not to prepare nlp model ###
+1)data Aquisition
+2)Text Preparation:1)text cleaning:spell mistake imogis 2)Basic preprocessing:stopword,puncuation,pos taging,chinking,tokenize formate madhe aane 3)advance preprocenssing
+3)feature Engineearing: convert data text to number bag of word , tfidf etc
+4)modling:buld the model and evaluate the model for the performance and select best model
+5)deplyment:1)swata deployment 2)monetaring:run kartoy teva monitor karto without changes 3)and model update.
 
 
   #### Old re(reguler expression) concept #####
