@@ -355,3 +355,5 @@ print(words)      #alpabet aslele token fkt ghetle pn aapla data madhe sagle app
 stop_words = set(stopwords.words('english'))
 words = [w for w in words if not w in stop_words]
 print(words)       #stopword madhe naslele token fkt show hotil
+
+### camelot #pdf reader to extract data
